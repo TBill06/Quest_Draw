@@ -4,7 +4,22 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/SceneManager.unity
+    guid: c10f5e27b4158d243acf4cb3712544b6
+  - enabled: 0
+    path: Assets/Scenes/Procedural.unity
+    guid: acd4dfe9ba2f5e745ab3e3e0fdbc38f2
+  - enabled: 0
+    path: Assets/Scenes/AirDraw.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/Samples/Meta XR Core SDK/65.0.0/Mixed Reality Sample/Scenes/CustomSceneManager.unity
+    guid: 791889f480495ad4bb295ab9733f3cd6
+  - enabled: 1
+    path: Assets/Scenes/Scene.unity
+    guid: f2718cfc1b7ce824c8f4b7f531be9599
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 60c0c0a39b9701348b6b8af07a2d3cb2, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 85c8cff8dcf922e44b954a3b07da70ee, type: 2}
