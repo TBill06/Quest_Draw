@@ -76,46 +76,70 @@ public class DynamicSceneManager : MonoBehaviour
 
     async Task UpdateScene()
     {
+        Debug.Log("Updating scene");
         // get current snapshot and compare to previous
         var currentSnapshot = await LoadSceneSnapshotAsync();
         var differences = new SnapshotComparer(
             _snapshot, currentSnapshot).Compare();
+
+        Debug.Log($"Found {differences.Count} differences");
 
         // update unity objects from the differences
         await UpdateUnityObjects(differences, currentSnapshot);
 
         // update previous snapshot
         _snapshot = currentSnapshot;
+        Debug.Log("Scene updated");
     }
 
     async Task<SceneSnapshot> LoadSceneSnapshotAsync()
     {
-        // create snapshot from all rooms and their anchors
-        // saving some of the anchor data to detect changes
-        var snapshot = new SceneSnapshot();
+    Debug.Log("LoadSceneSnapshotAsync started");
 
-        var rooms = new List<OVRAnchor>();
-        await OVRAnchor.FetchAnchorsAsync(rooms, new OVRAnchor.FetchOptions { SingleComponentType = typeof(OVRRoomLayout) });
-        foreach (var room in rooms)
-        {
+    // create snapshot from all rooms and their anchors
+    // saving some of the anchor data to detect changes
+    var snapshot = new SceneSnapshot();
+
+    var rooms = new List<OVRAnchor>();
+    await OVRAnchor.FetchAnchorsAsync(rooms, new OVRAnchor.FetchOptions { SingleComponentType = typeof(OVRRoomLayout) });
+    Debug.Log($"Fetched {rooms.Count} rooms");
+
+    foreach (var room in rooms)
+    {
+        Debug.Log($"Processing room {room.Uuid}");
+
             if (!room.TryGetComponent(out OVRAnchorContainer container))
+            {
+                Debug.Log($"Failed to get OVRAnchorContainer component for room {room.Uuid}");
                 continue;
+            }
 
             var children = new List<OVRAnchor>();
             await container.FetchAnchorsAsync(children);
+            Debug.Log($"Fetched {children.Count} child anchors for room {room.Uuid}");
+
             snapshot.Anchors.Add(room, new SceneSnapshot.Data { Children = children });
 
             foreach (var child in children)
             {
+                Debug.Log($"Processing child anchor {child.Uuid}");
+
                 var data = new SceneSnapshot.Data();
                 if (child.TryGetComponent(out OVRBounded2D b2d) && b2d.IsEnabled)
+                {
                     data.Rect = b2d.BoundingBox;
+                    Debug.Log($"Added OVRBounded2D data for child anchor {child.Uuid}");
+                }
                 if (child.TryGetComponent(out OVRBounded3D b3d) && b3d.IsEnabled)
+                {
                     data.Bounds = b3d.BoundingBox;
+                    Debug.Log($"Added OVRBounded3D data for child anchor {child.Uuid}");
+                }
                 snapshot.Anchors.Add(child, data);
             }
         }
 
+        Debug.Log("LoadSceneSnapshotAsync completed");
         return snapshot;
     }
 

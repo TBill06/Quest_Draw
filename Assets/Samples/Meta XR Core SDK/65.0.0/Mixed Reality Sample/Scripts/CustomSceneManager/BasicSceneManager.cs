@@ -36,19 +36,23 @@ public class BasicSceneManager : MonoBehaviour
 {
     void Start()
     {
+        Debug.Log("Starting scene manager");
         LoadSceneAsync();
     }
 
     async void LoadSceneAsync()
     {
+        Debug.Log("Loading scene");
         // fetch all rooms, with a SceneCapture fallback
         var rooms = new List<OVRAnchor>();
         await OVRAnchor.FetchAnchorsAsync(rooms, new OVRAnchor.FetchOptions
         {
             SingleComponentType = typeof(OVRRoomLayout),
         });
+        Debug.Log($"Found {rooms.Count} rooms");
         if (rooms.Count == 0)
         {
+            Debug.Log("No rooms found, capturing scene");
             var sceneCaptured = await OVRScene.RequestSpaceSetup();
             if (!sceneCaptured)
                 return;
@@ -62,12 +66,14 @@ public class BasicSceneManager : MonoBehaviour
         // fetch room elements, create objects for them
         var tasks = rooms.Select(async room =>
         {
+            Debug.Log($"Processing room {room.Uuid}");
             var roomObject = new GameObject($"Room-{room.Uuid}");
             if (!room.TryGetComponent(out OVRAnchorContainer container))
                 return;
 
             var children = new List<OVRAnchor>();
             await container.FetchAnchorsAsync(children);
+            Debug.Log($"Found {children.Count} children in room {room.Uuid}");
             await CreateSceneAnchors(roomObject, children);
         }).ToList();
         await Task.WhenAll(tasks);
@@ -75,9 +81,11 @@ public class BasicSceneManager : MonoBehaviour
 
     async Task CreateSceneAnchors(GameObject roomGameObject, List<OVRAnchor> anchors)
     {
+        Debug.Log($"Creating scene anchors for {anchors.Count} anchors");
         // we create tasks to iterate all anchors in parallel
         var tasks = anchors.Select(async anchor =>
         {
+            Debug.Log($"Processing anchor {anchor.Uuid}");
             // can we locate it in the world?
             if (!anchor.TryGetComponent(out OVRLocatable locatable))
                 return;
@@ -105,8 +113,11 @@ public class BasicSceneManager : MonoBehaviour
                 helper.CreateVolume(b3d);
             if (anchor.TryGetComponent(out OVRTriangleMesh mesh) && mesh.IsEnabled)
                 helper.CreateMesh(mesh);
+
+            Debug.Log($"Created object for anchor {anchor.Uuid}");
         }).ToList();
 
         await Task.WhenAll(tasks);
+        Debug.Log($"Finished creating scene anchors for {anchors.Count} anchors");
     }
 }

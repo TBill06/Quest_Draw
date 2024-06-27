@@ -24,8 +24,17 @@ MonoBehaviour:
       _feature: 0
       _state: 0
   _middleFeatureConfigs:
-    _value: []
+    _value:
+    - _mode: 1
+      _feature: 0
+      _state: 0
   _ringFeatureConfigs:
-    _value: []
+    _value:
+    - _mode: 1
+      _feature: 0
+      _state: 0
   _pinkyFeatureConfigs:
-    _value: []
+    _value:
+    - _mode: 1
+      _feature: 0
+      _state: 0

@@ -4,22 +4,22 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using System.Linq;
 
+// Code to generate a procedural tube in Unity
 namespace Unity.ProceduralTube
 {
     [RequireComponent(typeof(MeshFilter))]
     public class ProceduralTube : MonoBehaviour
     {
         [Min(0)]
-        public float tubeRadius = 0.009f;
+        public float tubeRadius = 0.007f;
         [Min(1)]
         public int tubeSegments = 64;
         [Min(0)]
-        public float minDistance = 0.009f;
+        public float minDistance = 0.007f;
 
         private Mesh currentTubeMesh;
         private List<Vector3> points = new List<Vector3>();
         private MeshFilter meshFilter;
-        private int lastUpdate = 0;
         private List<Vector3> vertices = new List<Vector3>();
         private List<int> triangles = new List<int>();
         private List<Vector2> uvs = new List<Vector2>();
@@ -30,26 +30,17 @@ namespace Unity.ProceduralTube
             meshFilter = GetComponent<MeshFilter>();
             if (currentTubeMesh == null) currentTubeMesh = new Mesh();
             meshFilter.mesh = currentTubeMesh;
-            lastUpdate = PropHashCode();
+        }
+
+        public List<Vector3> Points
+        {
+            get { return points; }
         }
 
         public void AddPoint(Vector3 point)
         {
-            // if (points.Count == 0 || Vector3.Distance(points[points.Count - 1], point) > minDistance)
-            // {
-            //     points.Add(point);
-            //     Debug.Log("AddPoint: " + point);
-            //     Debug.Log("points.Count Tubeside: " + points.Count);
-            //     GenerateMesh();
-            // }
             points.Add(point);
             GenerateMesh();
-            Debug.Log("AddPoint: " + point);
-        }
-
-        private int PropHashCode()
-        {
-            return points.Aggregate(0, (total, it) => total ^ it.GetHashCode()) ^ tubeRadius.GetHashCode() ^ tubeSegments.GetHashCode() ^ minDistance.GetHashCode();
         }
 
         private void GenerateMesh()
@@ -131,14 +122,6 @@ namespace Unity.ProceduralTube
             currentTubeMesh.uv = uvs.ToArray();
             currentTubeMesh.normals = normals.ToArray();
             meshFilter.mesh = currentTubeMesh;
-        }
-
-        private void LateUpdate()
-        {
-            if (lastUpdate != PropHashCode())
-            {
-                GenerateMesh();
-            }
         }
     }
 }

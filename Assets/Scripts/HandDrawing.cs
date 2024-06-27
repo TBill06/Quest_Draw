@@ -4,14 +4,13 @@ using UnityEngine;
 using Oculus.Interaction.Input;
 using Unity.ProceduralTube;
 
+// This script draws in 3D space when user pinches with their index and thumb fingers.
+// It uses the ProceduralTube component to draw tubes in 3D space. Ideal to use for our draw in 3d condition.
+// Parameters: Hand, tubeMaterial.
 public class HandDrawing : MonoBehaviour
 {
-    // Reference to the Hand component
     public Hand hand;
-    public float tubeRadius = 0.007f;
-    public int tubeSegments = 64;
     public Material tubeMaterial;
-    public float minDistance = 0.007f;
 
     private bool isDrawing = false;
     private ProceduralTube currentTube;
@@ -35,21 +34,18 @@ public class HandDrawing : MonoBehaviour
         }
     }
 
+    // Initializes a new tube object
     void StartDrawing()
     {
-        // Set the drawing state to true
         isDrawing = true;
 
         GameObject tubeObject = new GameObject("Tube");
         currentTube = tubeObject.AddComponent<ProceduralTube>();
         meshRenderer = tubeObject.AddComponent<MeshRenderer>();
         meshRenderer.material = tubeMaterial;
-
-        currentTube.tubeRadius = tubeRadius;
-        currentTube.tubeSegments = tubeSegments;
-        currentTube.minDistance = minDistance;
     }
 
+    // Updates the line by adding points to the tube
     void UpdateLine()
     {
         if (isDrawing)
@@ -61,12 +57,10 @@ public class HandDrawing : MonoBehaviour
             Vector3 drawpoint = (pose1.position + pose2.position) / 2;
 
             currentTube.AddPoint(drawpoint);
-            Debug.Log("Drawing point: " + drawpoint);
-            Debug.Log("Tube radius: " + tubeRadius);
-            Debug.Log("Min distance: " + minDistance);
         }
     }
 
+    // Stops drawing
     void StopDrawing()
     {
         isDrawing = false;

@@ -4,13 +4,14 @@ using UnityEngine;
 using Oculus.Interaction.Input;
 using Unity.ProceduralTube;
 
+// This script draws in 3D space when user points with their index finger.
+// It uses the ProceduralTube component to draw tubes in 3D space. Ideal to use for our draw in 3d condition.
+// Open the palm (more specifically the thumb and middle finger) to stop pointing and hence stop drawing.
+// Parameters: Hand, tubeMaterial.
 public class PointerDrawing : MonoBehaviour
 {
     public Hand hand;
-    public float tubeRadius = 0.007f;
-    public int tubeSegments = 64;
     public Material tubeMaterial;
-    public float minDistance = 0.007f;
 
     private bool indexPointerPoseDetected = false;
     private bool isDrawing = false;
@@ -35,11 +36,13 @@ public class PointerDrawing : MonoBehaviour
         }
     }
 
+    // Public method to set the index finger pose detected
     public void SetIndexPointerPoseDetected(bool detected)
     {
         indexPointerPoseDetected = detected;
     }
 
+    // Initializes a new tube object
     void StartDrawing()
     {
         isDrawing = true;
@@ -48,12 +51,9 @@ public class PointerDrawing : MonoBehaviour
         currentTube = tubeObject.AddComponent<ProceduralTube>();
         meshRenderer = tubeObject.AddComponent<MeshRenderer>();
         meshRenderer.material = tubeMaterial;
-
-        currentTube.tubeRadius = tubeRadius;
-        currentTube.tubeSegments = tubeSegments;
-        currentTube.minDistance = minDistance;
     }
 
+    // Updates the line by adding points to the tube
     void UpdateLine()
     {
         if (isDrawing)
@@ -61,12 +61,10 @@ public class PointerDrawing : MonoBehaviour
             Pose pose1;
             hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
             currentTube.AddPoint(pose1.position);
-            Debug.Log("Drawing point: " + pose1.position);
-            Debug.Log("Tube radius: " + tubeRadius);
-            Debug.Log("Min distance: " + minDistance);
         }
     }
 
+    // Stops drawing
     void StopDrawing()
     {
         isDrawing = false;

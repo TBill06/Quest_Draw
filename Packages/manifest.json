@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "com.github.oparaskos.unity.tube.renderer": "https://github.com/oparaskos/unity-tube-renderer.git",
-    "com.meta.xr.sdk.all": "65.0.0",
-    "com.meta.xr.sdk.interaction.ovr.samples": "65.0.0",
+    "com.meta.xr.mrutilitykit": "66.0.0",
+    "com.meta.xr.sdk.all": "66.0.0",
     "com.unity.collab-proxy": "2.3.1",
     "com.unity.feature.development": "1.0.1",
+    "com.unity.mobile.android-logcat": "1.4.2",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.7.6",
     "com.unity.ugui": "1.0.0",

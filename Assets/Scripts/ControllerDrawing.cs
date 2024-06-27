@@ -2,107 +2,78 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Oculus.Interaction.Input;
+using Unity.ProceduralTube;
 
+// This script draws in 3D space when user holds the controller like a pen and presses the hand trigger.
+// It uses the ProceduralTube component to draw tubes in 3D space. Ideal to use for our draw in 3d condition.
+// Don't draw with both controllers at the same time.
+// Parameters: tubeMaterial.
 public class ControllerDrawing : MonoBehaviour
 {
-    // Reference to the Controller component
-    public Controller controller; 
+    public Material leftTubeMaterial;
+    public Material rightTubeMaterial;
+    private bool isDrawing = false;
+    private ProceduralTube currentTube;
+    private Mesh currentTubeMesh;
+    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
 
-    // Reference to the LineRenderer component
-    private LineRenderer lineRenderer;
-
-    // Reference to the pokeBall prefab
-    public GameObject leftPokeBall;
-    public GameObject rightPokeBall;
-
-    // Reference to the current line being drawn
-    private GameObject currentLine;
-
-    // Reference to the material used for the line
-    public Material leftLineMaterial;
-    public Material rightLineMaterial;
-
-    // Private field to track drawing state
-    private bool isDrawingLeft = false;
-    private bool isDrawingRight = false;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Get the Controller component
-        controller = GetComponent<Controller>(); 
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger))
+        OVRInput.Controller activeController = OVRInput.Controller.None;
+        Material material = null;
+        if (OVRInput.Get(OVRInput.RawButton.RHandTrigger))
         {
-            if (controller.Handedness == Handedness.Left && !isDrawingLeft)
+            activeController = OVRInput.Controller.RTouch;
+            material = rightTubeMaterial;
+        }
+        else if (OVRInput.Get(OVRInput.RawButton.LHandTrigger))
+        {
+            activeController = OVRInput.Controller.LTouch;
+            material = leftTubeMaterial;
+        }
+        if (activeController != OVRInput.Controller.None)
+        {
+            if (!isDrawing)
             {
-                StartDrawing(leftPokeBall, leftLineMaterial);
-                isDrawingLeft = true;
+                StartDrawing(material);
             }
-            if (isDrawingLeft)
-            {
-                UpdateDrawing(leftPokeBall);
-            }
+            UpdateLine(activeController);
         }
         else
-        {
-            isDrawingLeft = false;
-        }
-
-        if (OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
-        {
-            if (controller.Handedness == Handedness.Right && !isDrawingRight)
-            {
-                StartDrawing(rightPokeBall, rightLineMaterial);
-                isDrawingRight = true;
-            }
-            if (isDrawingRight)
-            {
-                UpdateDrawing(rightPokeBall);
-            }
-        }
-        else
-        {
-            isDrawingRight = false;
-        }
-        if (!isDrawingLeft && !isDrawingRight)
         {
             StopDrawing();
         }
     }
 
-    void StartDrawing(GameObject pokeBall, Material lineMaterial)
+    // Initializes a new tube object
+    void StartDrawing(Material material)
     {
-        // Create a new line object
-        currentLine = new GameObject("Line");
-        lineRenderer = currentLine.AddComponent<LineRenderer>();
+        isDrawing = true;
 
-        // Set the line properties
-        lineRenderer.startWidth = 0.01f;
-        lineRenderer.endWidth = 0.01f;
-        lineRenderer.material = lineMaterial;
-
-        lineRenderer.positionCount = 1;
-        lineRenderer.SetPosition(0, pokeBall.transform.position);
+        GameObject tubeObject = new GameObject("Tube");
+        currentTube = tubeObject.AddComponent<ProceduralTube>();
+        meshRenderer = tubeObject.AddComponent<MeshRenderer>();
+        meshRenderer.material = material;
     }
 
-    void UpdateDrawing(GameObject pokeBall)
+    // Updates the line by adding points to the tube
+    void UpdateLine(OVRInput.Controller controller)
     {
-        if (isDrawingLeft || isDrawingRight)
+        if (isDrawing)
         {
-            lineRenderer.positionCount++;
-            lineRenderer.SetPosition(lineRenderer.positionCount - 1, pokeBall.transform.position);
+            Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(controller);
+            Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(controller);
+            // Draw a point 0.095m below the controller (at the tip)
+            Vector3 downDirection = controllerRotation * Quaternion.Euler(40,0,0) * new Vector3(-0.01f, -1, 0);
+            Vector3 drawpoint = controllerPosition + downDirection * 0.095f;
+            currentTube.AddPoint(drawpoint);
         }
     }
 
+    // Stops drawing
     void StopDrawing()
     {
-        // Set the drawing state to false
-        isDrawingLeft = false;
-        isDrawingRight = false;
+        isDrawing = false;
     }
 }
