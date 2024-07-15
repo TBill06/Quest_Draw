@@ -14,8 +14,6 @@ public class ControllerDrawing : MonoBehaviour
     public Material rightTubeMaterial;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private Mesh currentTubeMesh;
-    private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
 
     void Update()

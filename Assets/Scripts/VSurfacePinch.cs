@@ -15,8 +15,6 @@ public class VSurfacePinch : MonoBehaviour
     public Material tubeMaterial;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private Mesh currentTubeMesh;
-    private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private GameObject quad;
     // private LineRenderer lineRenderer;

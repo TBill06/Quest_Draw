@@ -11,23 +11,24 @@
     </activity>
     <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="false" />
     <meta-data android:name="com.samsung.android.vr.application.mode" android:value="vr_only" />
-    <meta-data android:name="com.oculus.ossplash.background" android:value="black" />
+    <meta-data android:name="com.oculus.ossplash.background" android:value="passthrough-contextual" />
     <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|questpro|eureka" />
     <meta-data android:name="com.oculus.handtracking.frequency" android:value="HIGH" />
     <meta-data android:name="com.oculus.handtracking.version" android:value="V2.0" />
+    <meta-data android:name="com.oculus.telemetry.project_guid" android:value="2fcc2bc2-5a66-41b0-a0fc-1f1f965b0bb0" />
   </application>
   <uses-feature android:name="android.hardware.vr.headtracking" android:version="1" android:required="true" />
   <uses-feature android:name="oculus.software.handtracking" android:required="false" />
   <uses-permission android:name="com.oculus.permission.HAND_TRACKING" />
   <uses-permission android:name="com.oculus.permission.USE_ANCHOR_API" />
   <uses-permission android:name="com.oculus.permission.IMPORT_EXPORT_IOT_MAP_DATA" />
-  <uses-feature android:name="com.oculus.feature.PASSTHROUGH" android:required="false" />
-  <uses-feature android:name="com.oculus.software.body_tracking" android:required="false" />
+  <uses-feature android:name="com.oculus.feature.PASSTHROUGH" android:required="true" />
+  <uses-feature android:name="com.oculus.software.body_tracking" android:required="true" />
   <uses-permission android:name="com.oculus.permission.BODY_TRACKING" />
-  <uses-feature android:name="oculus.software.face_tracking" android:required="false" />
+  <uses-feature android:name="oculus.software.face_tracking" android:required="true" />
   <uses-permission android:name="com.oculus.permission.FACE_TRACKING" />
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
-  <uses-feature android:name="oculus.software.eye_tracking" android:required="false" />
+  <uses-feature android:name="oculus.software.eye_tracking" android:required="true" />
   <uses-permission android:name="com.oculus.permission.EYE_TRACKING" />
   <uses-permission android:name="com.oculus.permission.USE_SCENE" />
 </manifest>

@@ -11,11 +11,9 @@ namespace Unity.ProceduralTube
     public class ProceduralTube : MonoBehaviour
     {
         [Min(0)]
-        public float tubeRadius = 0.007f;
+        public float tubeRadius = 0.006f;
         [Min(1)]
-        public int tubeSegments = 64;
-        [Min(0)]
-        public float minDistance = 0.007f;
+        public int tubeSegments = 84;
 
         private Mesh currentTubeMesh;
         private List<Vector3> points = new List<Vector3>();

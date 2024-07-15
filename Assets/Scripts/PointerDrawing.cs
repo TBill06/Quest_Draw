@@ -16,8 +16,6 @@ public class PointerDrawing : MonoBehaviour
     private bool indexPointerPoseDetected = false;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private Mesh currentTubeMesh;
-    private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
 
     void Update()

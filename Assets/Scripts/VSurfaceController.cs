@@ -15,8 +15,6 @@ public class VSurfaceController : MonoBehaviour
     public Material rightTubeMaterial;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private Mesh currentTubeMesh;
-    private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private GameObject quad;
     private ColliderSurface colliderSurface;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Text;
+using Unity.ProceduralTube;
 
 // This script logs the data of the tubes drawn in the virtual environment.
 public class LogData : MonoBehaviour
@@ -24,7 +25,7 @@ public class LogData : MonoBehaviour
         VSurfacePoint vSurfacePoint = FindObjectOfType<VSurfacePoint>();
         if (vSurfacePoint != null)
         {
-            bool drawnByPoint = vSurfacePoint.drawnByPoint;
+            bool drawnByPoint = vSurfacePoint.DrawnByPoint;
         }
 
         using (StreamWriter sw = new StreamWriter(fileName))
@@ -47,6 +48,6 @@ public class LogData : MonoBehaviour
         {
             Destroy(tube);
         }
-        tubes.Clear();
+        tubes = new GameObject[0];
     }
 }

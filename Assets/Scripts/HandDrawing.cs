@@ -14,8 +14,6 @@ public class HandDrawing : MonoBehaviour
 
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private Mesh currentTubeMesh;
-    private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
 
     void Update()
