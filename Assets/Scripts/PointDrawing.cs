@@ -8,7 +8,7 @@ using Unity.ProceduralTube;
 // It uses the ProceduralTube component to draw tubes in 3D space. Ideal to use for our draw in 3d condition.
 // Open the palm (more specifically the thumb and middle finger) to stop pointing and hence stop drawing.
 // Parameters: Hand, tubeMaterial.
-public class PointerDrawing : MonoBehaviour
+public class PointDrawing : MonoBehaviour
 {
     public Hand hand;
     public Material tubeMaterial;
@@ -16,7 +16,6 @@ public class PointerDrawing : MonoBehaviour
     private bool indexPointerPoseDetected = false;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private MeshRenderer meshRenderer;
 
     void Update()
     {
@@ -47,8 +46,7 @@ public class PointerDrawing : MonoBehaviour
 
         GameObject tubeObject = new GameObject("Tube");
         currentTube = tubeObject.AddComponent<ProceduralTube>();
-        meshRenderer = tubeObject.AddComponent<MeshRenderer>();
-        meshRenderer.material = tubeMaterial;
+        currentTube.material = tubeMaterial;
     }
 
     // Updates the line by adding points to the tube
@@ -56,8 +54,11 @@ public class PointerDrawing : MonoBehaviour
     {
         if (isDrawing)
         {
+            // Get the position of the index finger tip
             Pose pose1;
             hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
+
+            // Add the point to the tube
             currentTube.AddPoint(pose1.position);
         }
     }

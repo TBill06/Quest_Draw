@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 1320434392137607453}
   - component: {fileID: 3038407433694828721}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: VRBoard
+  m_TagString: Cap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

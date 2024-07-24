@@ -7,21 +7,21 @@ using Unity.ProceduralTube;
 // This script draws in 3D space when user points with their index finger.
 // It uses the ProceduralTube component to draw tubes in 3D space. Ideal to use for our draw in 3d condition.
 // Open the palm (more specifically the thumb and middle finger) to stop pointing and hence stop drawing.
+// The script uses the OneEuroFilter to filter the hand position data.
 // Parameters: Hand, tubeMaterial.
-public class PointerDrawingTest : MonoBehaviour
+public class PointDrawingV2 : MonoBehaviour
 {
     public Hand hand;
-    public Material tubeMaterial;
-    public float filterFrequency = 120.0f;
+    public Material tubeMaterial;    
+    public float filterFrequency = 90.0f;
     public float minCutoff = 1.0f;
-    public float beta = 5f;
+    public float beta = 10f;
     public float dcutoff = 1.0f;
     
     private OneEuroFilter<Vector3> vector3Filter;
     private bool indexPointerPoseDetected = false;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private MeshRenderer meshRenderer;
 
     void Update()
     {
@@ -49,12 +49,12 @@ public class PointerDrawingTest : MonoBehaviour
     void StartDrawing()
     {
         isDrawing = true;
+
+        // Initialize the filter and the tube object
         vector3Filter = new OneEuroFilter<Vector3>(filterFrequency,minCutoff,beta,dcutoff);
-        
         GameObject tubeObject = new GameObject("Tube");
         currentTube = tubeObject.AddComponent<ProceduralTube>();
-        meshRenderer = tubeObject.AddComponent<MeshRenderer>();
-        meshRenderer.material = tubeMaterial;
+        currentTube.material = tubeMaterial;
     }
 
     // Updates the line by adding points to the tube
@@ -62,11 +62,14 @@ public class PointerDrawingTest : MonoBehaviour
     {
         if (isDrawing)
         {
+            // Get the position of the index finger tip
             Pose pose1;
             hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
-            Debug.Log("Pose1: "+pose1.position);
+
+            // Filter the hand position
             Vector3 filteredPoint = vector3Filter.Filter(pose1.position);
-            Debug.Log("Filtered Point: "+filteredPoint);
+
+            // Add the point to the tube
             currentTube.AddPoint(filteredPoint);
         }
     }

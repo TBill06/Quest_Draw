@@ -5,6 +5,8 @@ using Oculus.Interaction.Input;
 using Oculus.Interaction.Surfaces;
 using Unity.ProceduralTube;
 
+/** Deprecated, Use V2 **/
+
 // This script draws on a virtual quad when user pinches with their index and thumb fingers.
 // It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in virtual surface condition.
 // If pinching before the virtual surface, raycasting willbe used, if piching through, offset will be used.
@@ -15,7 +17,6 @@ public class VSurfacePinch : MonoBehaviour
     public Material tubeMaterial;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private MeshRenderer meshRenderer;
     private GameObject quad;
     // private LineRenderer lineRenderer;
     // private LineRenderer lineRenderer2;
@@ -107,8 +108,7 @@ public class VSurfacePinch : MonoBehaviour
 
         GameObject tubeObject = new GameObject("Tube");
         currentTube = tubeObject.AddComponent<ProceduralTube>();
-        meshRenderer = tubeObject.AddComponent<MeshRenderer>();
-        meshRenderer.material = tubeMaterial;
+        currentTube.material = tubeMaterial;
     }
 
     // Updates the line by adding points to the tube

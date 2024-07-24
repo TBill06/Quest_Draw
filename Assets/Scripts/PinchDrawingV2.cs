@@ -6,15 +6,20 @@ using Unity.ProceduralTube;
 
 // This script draws in 3D space when user pinches with their index and thumb fingers.
 // It uses the ProceduralTube component to draw tubes in 3D space. Ideal to use for our draw in 3d condition.
+// The script uses the OneEuroFilter to filter the hand position data.
 // Parameters: Hand, tubeMaterial.
-public class HandDrawing : MonoBehaviour
+public class PinchDrawingV2 : MonoBehaviour
 {
     public Hand hand;
     public Material tubeMaterial;
+    public float filterFrequency = 90.0f;
+    public float minCutoff = 1.0f;
+    public float beta = 10f;
+    public float dcutoff = 1.0f;
 
-    private bool isDrawing = false;
+    private OneEuroFilter<Vector3> vector3Filter;
     private ProceduralTube currentTube;
-    private MeshRenderer meshRenderer;
+    private bool isDrawing = false;
 
     void Update()
     {
@@ -36,11 +41,13 @@ public class HandDrawing : MonoBehaviour
     void StartDrawing()
     {
         isDrawing = true;
-
+        
+        // Initialize the filter and the tube object
+        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency,minCutoff,beta,dcutoff);
         GameObject tubeObject = new GameObject("Tube");
         currentTube = tubeObject.AddComponent<ProceduralTube>();
-        meshRenderer = tubeObject.AddComponent<MeshRenderer>();
-        meshRenderer.material = tubeMaterial;
+        currentTube.material = tubeMaterial;
+
     }
 
     // Updates the line by adding points to the tube
@@ -48,12 +55,18 @@ public class HandDrawing : MonoBehaviour
     {
         if (isDrawing)
         {
+            // Get the hand positions
             Pose pose1;
             Pose pose2;
             hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
             hand.GetJointPose(HandJointId.HandThumbTip, out pose2);
-            Vector3 drawpoint = (pose1.position + pose2.position) / 2;
 
+            // Filter the hand positions
+            Vector3 filter1 = vector3Filter.Filter(pose1.position);
+            Vector3 filter2 = vector3Filter.Filter(pose2.position);
+            Vector3 drawpoint = (filter1 + filter2) / 2;
+            
+            // Add point to the tube
             currentTube.AddPoint(drawpoint);
         }
     }

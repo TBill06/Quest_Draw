@@ -1,60 +1,51 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using System.Linq;
 
-// Code to generate a procedural tube in Unity
 namespace Unity.ProceduralTube
 {
-    [RequireComponent(typeof(MeshFilter))]
     public class ProceduralTube : MonoBehaviour
     {
         [Min(0)]
         public float tubeRadius = 0.006f;
         [Min(1)]
-        public int tubeSegments = 84;
+        public int tubeSegments = 64;
+        public Material material;
 
-        private Mesh currentTubeMesh;
         private List<Vector3> points = new List<Vector3>();
-        private MeshFilter meshFilter;
-        private List<Vector3> vertices = new List<Vector3>();
-        private List<int> triangles = new List<int>();
-        private List<Vector2> uvs = new List<Vector2>();
-        private List<Vector3> normals = new List<Vector3>();
+        private List<Vector3> logPoints = new List<Vector3>();
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+        List<Vector2> uvs = new List<Vector2>();
+        List<Vector3> normals = new List<Vector3>();
+        private int tubeKidCount = 0;
+        private GameObject lastTubeKid;
+        private Vector3 lastPointAdded;
 
         private void Start()
         {
-            meshFilter = GetComponent<MeshFilter>();
-            if (currentTubeMesh == null) currentTubeMesh = new Mesh();
-            meshFilter.mesh = currentTubeMesh;
+            CreateNewTubeKid();
         }
 
-        public List<Vector3> Points
-        {
-            get { return points; }
-        }
+        public List<Vector3> Points => logPoints;
 
         public void AddPoint(Vector3 point)
         {
+            logPoints.Add(point);
             points.Add(point);
             GenerateMesh();
         }
 
         private void GenerateMesh()
         {
-            if (points.Count < 2)
-            {
-                return;
-            }
+            if (points.Count < 2) return;
 
-            float totalLength = 0f;
-            float cumulativeDistance = 0f;
-            currentTubeMesh.Clear();
             vertices.Clear();
             triangles.Clear();
             uvs.Clear();
             normals.Clear();
+
+            float totalLength = 0f;
+            float cumulativeDistance = 0f;
 
             for (int i = 1; i < points.Count; i++)
             {
@@ -113,13 +104,60 @@ namespace Unity.ProceduralTube
                         triangles.Add(baseIndex + nextSegment + tubeSegments);
                     }
                 }
+
+                if (vertices.Count >= 30000)
+                {
+                    FinalizeCurrentTubeKidMesh(vertices, triangles, uvs, normals);
+                    CreateNewTubeKid();
+
+                    // Clear lists for the next TubeKid
+                    vertices.Clear();
+                    triangles.Clear();
+                    uvs.Clear();
+                    normals.Clear();
+
+                    // Adjust points for continuity
+                    points.Clear();
+                    points.Insert(0, lastPointAdded);
+                    break;
+                }
+                lastPointAdded = points[i];
             }
 
-            currentTubeMesh.vertices = vertices.ToArray();
-            currentTubeMesh.triangles = triangles.ToArray();
-            currentTubeMesh.uv = uvs.ToArray();
-            currentTubeMesh.normals = normals.ToArray();
-            meshFilter.mesh = currentTubeMesh;
+            FinalizeCurrentTubeKidMesh(vertices, triangles, uvs, normals);
+        }
+
+        private void CreateNewTubeKid()
+        {
+            GameObject tubeObject = new GameObject("TubeKid" + tubeKidCount);
+            tubeObject.transform.parent = transform;
+
+            // Add MeshFilter and MeshRenderer
+            MeshFilter meshFilter = tubeObject.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = tubeObject.AddComponent<MeshRenderer>();
+            meshRenderer.material = material;
+
+            // Create a new mesh for the TubeKid
+            Mesh mesh = new Mesh();
+            meshFilter.mesh = mesh;
+
+            tubeKidCount++;
+            lastTubeKid = tubeObject;
+        }
+
+        private void FinalizeCurrentTubeKidMesh(List<Vector3> vertices, List<int> triangles, List<Vector2> uvs, List<Vector3> normals)
+        {
+            if (lastTubeKid == null) return;
+
+            Mesh mesh = lastTubeKid.GetComponent<MeshFilter>().sharedMesh;
+            mesh.Clear();
+
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
+            mesh.uv = uvs.ToArray();
+            mesh.normals = normals.ToArray();
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
         }
     }
 }
