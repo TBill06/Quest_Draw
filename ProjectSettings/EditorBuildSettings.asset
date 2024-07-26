@@ -38,6 +38,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RoomTest.unity
     guid: 7fa458907c2a0554380e6c680093be70
+  - enabled: 1
+    path: Assets/Scenes/Setup.unity
+    guid: 096a30f212add694aa995771a029b887
+  - enabled: 1
+    path: Assets/Scenes/ExperimentTask.unity
+    guid: 10e4b2bf4e20fb44284280e1c0f130f2
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 60c0c0a39b9701348b6b8af07a2d3cb2, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 85c8cff8dcf922e44b954a3b07da70ee, type: 2}
