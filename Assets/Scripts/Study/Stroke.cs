@@ -8,13 +8,13 @@ public enum Complexity { SIMPLE,  MEDIUM, COMPLEX }
 
 public class Stroke : MonoBehaviour
 {
-    public string name;
+    public string sName;
     public int num;
     public Complexity complexity;
 
 
     public string GetName() {
-        return name;
+        return sName;
     }
 
    public Complexity GetComplexity() {

@@ -46,7 +46,7 @@ public class TaskManager : MonoBehaviour
 
         strokeManager = GetComponent<StrokeManager>();
 
-        ShowStartBlock();
+        ReadyForNextBlock();
     }
 
 
@@ -72,8 +72,8 @@ public class TaskManager : MonoBehaviour
 
                 // Switch this based on what the condition is 
                 // (i.e. controller, pinch, or index)
-                // In the Initialize drawing function
-                if (InitializeDrawing()) {
+                // In the IsDrawing function
+                if (IsDrawing()) {
                     status = Status.Drawing;
                 }
 
@@ -92,7 +92,7 @@ public class TaskManager : MonoBehaviour
             // When drawing
             case (Status.Drawing):
 
-                if (!hand.GetIndexFingerIsPinching()) {
+                if (!IsDrawing()) {
                     status = Status.BlankAfterDraw;
                     timeRemaining = timeBreakBetweenDrawing;
                 }
@@ -118,16 +118,16 @@ public class TaskManager : MonoBehaviour
 
     // TODO: Use Tushar this for initializing the drawing vs. stopping
     // Will probably need public getters and setters in your scripts
-    bool InitializeDrawing() {
+    bool IsDrawing() {
 
         bool isDrawing = false;
 
-        // something like this
+        // something like this or a switch
         if (drawMethod == DrawMethod.Pinch) { 
             if (surface == Surface.None) {
                 // couldn't access this because it's private
                 // draw = GetComponent<PinchDrawingV2>().isDrawing;
-                draw = hand.GetIndexFingerIsPinching();
+                isDrawing = hand.GetIndexFingerIsPinching();
             }
         }
 
@@ -144,19 +144,18 @@ public class TaskManager : MonoBehaviour
     }
 
     // Shows a prompt at the start of a block
-    public void ShowStartBlock() {
+    public void ReadyForNextBlock() {
 
         startBlock.SetActive(true);
         GetComponent<PinchDrawingV2>().enabled = false;
         status = Status.Idle;
-        
+                
+         // Shuffles the stroke order
+        strokeManager.ResetOrder();
     }
 
     // Finish a block of drawings
     void FinishBlock() {
-
-        // Shuffles the stroke order
-        strokeManager.ResetOrder();
 
         // Increment block number
         int block = PlayerPrefs.GetInt("block");
@@ -184,7 +183,7 @@ public class TaskManager : MonoBehaviour
             PlayerPrefs.SetInt("block", block);
 
             // Shows the prompt at the start of a new block
-            ShowStartBlock();
+            ReadyForNextBlock();
         }
     }
 
