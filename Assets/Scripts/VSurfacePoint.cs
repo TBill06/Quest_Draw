@@ -5,6 +5,8 @@ using Oculus.Interaction.Input;
 using Oculus.Interaction.Surfaces;
 using Unity.ProceduralTube;
 
+/** Deprecated, Use V2 **/
+
 // This script draws on a virtual quad when user points with their index finger.
 // It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in virtual surface condition.
 // If pinching before the virtual surface, raycasting will be used, if piching through, offset will be used.
@@ -18,7 +20,6 @@ public class VSurfacePoint : MonoBehaviour
     private bool isDrawing = false;
     private bool indexPointerPoseDetected = false;
     private ProceduralTube currentTube;
-    private MeshRenderer meshRenderer;
     private GameObject quad;
     private ColliderSurface colliderSurface;
     private Vector3 colliderSurfacePosition;
@@ -82,8 +83,7 @@ public class VSurfacePoint : MonoBehaviour
 
         GameObject tubeObject = new GameObject("Tube");
         currentTube = tubeObject.AddComponent<ProceduralTube>();
-        meshRenderer = tubeObject.AddComponent<MeshRenderer>();
-        meshRenderer.material = tubeMaterial;
+        currentTube.material = tubeMaterial;
     }
 
     // Updates the line by adding points to the tube

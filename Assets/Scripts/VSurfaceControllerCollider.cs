@@ -13,11 +13,11 @@ public class VSurfaceControllerCollider : MonoBehaviour
 {
     public Material leftTubeMaterial;
     public Material rightTubeMaterial;
-    public Vector3 rotationCheck;
+    public Vector3 rotationCheck = new Vector3(45, 5, 0);
     public GameObject capsule;
     private ProceduralTube currentTube;
     private MeshRenderer meshRenderer;
-    public Material tubeMaterial;
+    private Material tubeMaterial;
     private OVRInput.Controller activeController;
 
     void Update()
@@ -34,31 +34,6 @@ public class VSurfaceControllerCollider : MonoBehaviour
             activeController = OVRInput.Controller.LTouch;
             tubeMaterial = leftTubeMaterial;
         }
-        if (OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
-        {
-            GameObject visual = GameObject.Find("OVRCameraRigInteraction/OVRCameraRig/OVRInteractionComprehensive/OVRControllers/LeftController/OVRControllerVisual");
-            if(visual.activeSelf)
-            {
-                visual.SetActive(false);
-            }
-            else
-            {
-                visual.SetActive(true);
-            }
-
-        }
-        else if (OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
-        {
-            GameObject visual = GameObject.Find("OVRCameraRigInteraction/OVRCameraRig/OVRInteractionComprehensive/OVRControllers/RightController/OVRControllerVisual");
-            if(visual.activeSelf)
-            {
-                visual.SetActive(false);
-            }
-            else
-            {
-                visual.SetActive(true);
-            }
-        }
         if (activeController != OVRInput.Controller.None)
         {
             Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(activeController);
@@ -74,7 +49,7 @@ public class VSurfaceControllerCollider : MonoBehaviour
             Rigidbody rb = capsule.GetComponent<Rigidbody>();
             rb.MovePosition(midPoint);
             rb.MoveRotation(Quaternion.LookRotation(downDirection) * Quaternion.Euler(90, 0, 0));
-            capsule.transform.localScale = new Vector3(0.01f, (distance / 2)+0.02f, 0.01f);
+            capsule.transform.localScale = new Vector3(0.01f, (distance / 2)+0.025f, 0.01f);
         }
     }
 
@@ -91,13 +66,13 @@ public class VSurfaceControllerCollider : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (activeController == OVRInput.Controller.None)
-        {
-            capsule.transform.position = new Vector3(0, 0, 0);
-            Rigidbody rb = capsule.GetComponent<Rigidbody>();
-            rb.MovePosition(new Vector3(0, 0, 0));
-            capsule.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-        }
+        // if (activeController == OVRInput.Controller.None)
+        // {
+        //     capsule.transform.position = new Vector3(0, 0, 0);
+        //     Rigidbody rb = capsule.GetComponent<Rigidbody>();
+        //     rb.MovePosition(new Vector3(0, 0, 0));
+        //     capsule.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+        // }
         if (collision.gameObject.CompareTag("Cap"))
         {
             // Debug.Log("Capsule position: " + capsule.transform.position+" "+capsule.transform.rotation+" "+capsule.transform.localScale);

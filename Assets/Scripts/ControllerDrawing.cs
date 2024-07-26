@@ -14,7 +14,6 @@ public class ControllerDrawing : MonoBehaviour
     public Material rightTubeMaterial;
     private bool isDrawing = false;
     private ProceduralTube currentTube;
-    private MeshRenderer meshRenderer;
 
     void Update()
     {
@@ -51,8 +50,7 @@ public class ControllerDrawing : MonoBehaviour
 
         GameObject tubeObject = new GameObject("Tube");
         currentTube = tubeObject.AddComponent<ProceduralTube>();
-        meshRenderer = tubeObject.AddComponent<MeshRenderer>();
-        meshRenderer.material = material;
+        currentTube.material = material;
     }
 
     // Updates the line by adding points to the tube
@@ -63,7 +61,7 @@ public class ControllerDrawing : MonoBehaviour
             Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(controller);
             Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(controller);
             // Draw a point 0.095m below the controller (at the tip)
-            Vector3 downDirection = controllerRotation * Quaternion.Euler(40,0,0) * new Vector3(-0.01f, -1, 0);
+            Vector3 downDirection = controllerRotation * Quaternion.Euler(45,5,0) * new Vector3(-0.01f, -1, 0);
             Vector3 drawpoint = controllerPosition + downDirection * 0.095f;
             currentTube.AddPoint(drawpoint);
         }

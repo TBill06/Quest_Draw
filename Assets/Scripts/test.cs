@@ -35,18 +35,21 @@ public class Test : MonoBehaviour
             List<MRUKAnchor> anchors = room.Anchors;
             foreach (MRUKAnchor anchor in anchors)
             {
-                if (anchor.Label.ToString() == "BED")
+                Debug.Log("Anchor: " + anchor.Label);
+                if (anchor.Label.ToString() == "WALL_ART")
                 {
-                    wall = anchor;
-                    Debug.Log("WallArt Transform: " + wall.transform.position+" "+wall.transform.rotation.eulerAngles+" "+wall.transform.localScale);
-                    Transform wallChild = wall.transform.GetChild(0);
+                    parent = anchor;
+                    parent.ParentAnchor = wall;
+                    Debug.Log("Wall Transform: " + wall.transform.position+" "+wall.transform.rotation.eulerAngles+" "+wall.transform.localScale);
+                    Debug.Log("WallArt Transform: " + parent.transform.position+" "+parent.transform.rotation.eulerAngles+" "+parent.transform.localScale);
+                    Transform wallChild = parent.transform.GetChild(0);
                     Debug.Log("WallArt Child Transform: " + wallChild.position+" "+wallChild.rotation.eulerAngles+" "+wallChild.localScale);
                     Transform wallGrandChild = wallChild.GetChild(0);
                     Debug.Log("WallArt GrandChild Transform: " + wallGrandChild.position+" "+wallGrandChild.rotation.eulerAngles+" "+wallGrandChild.localScale);
                     Debug.Log("WallArt GrandChild Collider: " + wallGrandChild.GetComponent<BoxCollider>().bounds);
 
-                    // GameObject cube = Instantiate(cubeIns, wall.transform.position, wall.transform.rotation);
-                    // cube.transform.localScale = wall.transform.localScale;
+                    // GameObject cube = Instantiate(cubeIns, parent.transform.position, parent.transform.rotation);
+                    // cube.transform.localScale = parent.transform.localScale;
                     // Debug.Log("Cube Transform: " + cube.transform.position+" "+cube.transform.rotation.eulerAngles+" "+cube.transform.localScale);
                     // Transform cubeChild = cube.transform.GetChild(0);
                     // Debug.Log("Cube Child Transform Before: " + cubeChild.position+" "+cubeChild.rotation.eulerAngles+" "+cubeChild.localScale);
@@ -58,14 +61,6 @@ public class Test : MonoBehaviour
                     // Debug.Log("Cube GrandChild Transform Before: " + cubeGrandChild.position+" "+cubeGrandChild.rotation.eulerAngles+" "+cubeGrandChild.localScale);
                     // Debug.Log("Cube GrandChild Collider: " + cubeGrandChild.GetComponent<Collider>().bounds);
                 }
-                // if (anchor.Label.ToString() == "COUCH")
-                // {
-                //     parent = anchor;
-                //     Debug.Log("Couch Transform: " + parent.transform.position+" "+parent.transform.rotation.eulerAngles+" "+parent.transform.localScale);
-                    
-                //     Transform parentChild = parent.transform.GetChild(0);
-                //     Debug.Log("Couch Child Transform: " + parentChild.position+" "+parentChild.rotation.eulerAngles+" "+parentChild.localScale);
-                // }
             }
 
             sceneInitialized = true;
@@ -101,6 +96,12 @@ public class Test : MonoBehaviour
             Ray ray = new Ray(pinchPoint, pinchDirection);
             RaycastHit hit;
             if (wall.Raycast(ray,0.1f,out hit))
+            {
+                lineRenderer.SetPosition(0, pinchPoint);
+                lineRenderer.SetPosition(1, hit.point);
+                Debug.Log("Hit point: "+hit.point);
+            }
+            if (parent.Raycast(ray,0.1f,out hit))
             {
                 lineRenderer.SetPosition(0, pinchPoint);
                 lineRenderer.SetPosition(1, hit.point);
