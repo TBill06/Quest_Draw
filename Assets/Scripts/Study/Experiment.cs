@@ -17,138 +17,150 @@ public class Experiment : MonoBehaviour
 
     public GameObject instructions;
 
-    // I just put the Setup scene here to start
-    public Scene nextScene;
+    Condition condition;
 
     void Start() {
+
         SetupNextCondition();
+    
     }
 
+    // Setup the next condition, will be run at the start of "BetweenConditions" scene
     public void SetupNextCondition() {
 
         int id = PlayerPrefs.GetInt("pid");
         int conditionState = PlayerPrefs.GetInt("conditionState");
 
-        // Tuple<DrawMethod, Surface> condition = GetOrdering(id)[conditionState];
-        Tuple<DrawMethod, Surface> condition = new Tuple<DrawMethod, Surface>(DrawMethod.Pinch, Surface.None);
+        for (int i = 0; i < 9; i++) {
 
-        switch (condition.Item1) {
-            case (DrawMethod.Pinch):
-            
-                // Set to Pinch
-                PlayerPrefs.SetInt("DrawMethod", (int) DrawMethod.Pinch);
-                break;
-            
-            case (DrawMethod.Index):
-            
-                // Set to Index
-                PlayerPrefs.SetInt("DrawMethod", (int) DrawMethod.Index);
-                break;
-            
-            case (DrawMethod.Controller):
-
-                // Set to Controller
-                PlayerPrefs.SetInt("DrawMethod", (int) DrawMethod.Controller);
-                break;
+            GetOrdering(i);
         }
-
-
-        switch (condition.Item2) {
-            case (Surface.Physical):
-
-                // Set "nextScene" to the Physical Surface Scene
-                break;
-            
-            case (Surface.Virtual):
-
-                // Set "nextScene" to the Virtual Surface Scene
-                break;
-            
-            case (Surface.None):
-
-                // Set "nextScene" to the No Surface Scene
-                break;
-        }
-
-        ShowInstructions();
-    }
-
-
-    void ShowInstructions() {
+        
+        condition = GetOrdering(id)[conditionState];
+        
+        PlayerPrefs.SetInt("DrawMethod", (int) condition.DrawMethod);
+        PlayerPrefs.SetInt("Surface", (int) condition.Surface);
+       
         instructions.SetActive(true);
     }
 
 
-    // This is inefficient, I'll rewrite it
-    public List<Tuple<DrawMethod, Surface>> GetOrdering(int pid)
-    {
+    // Start the next condition
+    public void StartNextCondition() {
+
+        switch (condition.Surface) {
+            case (Surface.Physical):
+
+                // Load the next condition scene: Physical Surface Draw
+                SceneManager.LoadScene("PhysicalSurfaceDraw-C3-Colliders");
+                break;
+            
+            case (Surface.Virtual):
+
+                // Load the next condition scene: Virtual Surface Draw
+                SceneManager.LoadScene("VirtualSurfaceDraw-C2-Colliders");
+                break;
+            
+            case (Surface.None):
+
+                // Load the next condition scene: No Surface Draw
+                SceneManager.LoadScene("NoSurfaceDraw-C1");
+                break;
+        }
+
+    }
+
+
+    // Get the ordering of conditions based on participant ID
+    Condition[] GetOrdering(int pid) {
 
         int order = pid % 9;
         
-        DrawMethod[] drawMethodOrder = new DrawMethod[3];
-        Surface[] surfaceOrder = new Surface[3];
+        Condition[] conditions = new Condition[9];
 
-        switch (order)
-        {
+        switch (order) {
+            
             case (0):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Pinch, DrawMethod.Index, DrawMethod.Controller};
-                surfaceOrder =  new Surface[]{Surface.Physical, Surface.Virtual, Surface.None};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None)};
+
                 break;
 
             case (1):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Index, DrawMethod.Controller, DrawMethod.Pinch};
-                surfaceOrder = new Surface[]{Surface.Physical, Surface.Virtual, Surface.None};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None)};
+
                 break;
 
             case (2):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Controller, DrawMethod.Pinch, DrawMethod.Index};
-                surfaceOrder = new Surface[]{Surface.Physical, Surface.Virtual, Surface.None};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None)};
+
                 break;
-            
-            //------------------------
-           
+
             case (3):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Pinch, DrawMethod.Index, DrawMethod.Controller};
-                surfaceOrder = new Surface[]{Surface.None, Surface.Physical, Surface.Virtual};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual)};
+
                 break;
 
             case (4):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Index, DrawMethod.Controller, DrawMethod.Pinch};
-                surfaceOrder = new Surface[]{Surface.None, Surface.Physical, Surface.Virtual};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual)};
+
                 break;
-                
+
             case (5):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Controller, DrawMethod.Pinch, DrawMethod.Index};
-                surfaceOrder = new Surface[]{Surface.None, Surface.Physical, Surface.Virtual};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual)};
+
                 break;
-            
-            //------------------------
-           
+
             case (6):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Pinch, DrawMethod.Index, DrawMethod.Controller};
-                surfaceOrder = new Surface[]{Surface.Virtual, Surface.None, Surface.Physical};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical)};
+
                 break;
 
             case (7):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Index, DrawMethod.Controller, DrawMethod.Pinch};
-                surfaceOrder = new Surface[]{Surface.Virtual, Surface.None, Surface.Physical};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical)};
+
                 break;
-                
+
             case (8):
-                drawMethodOrder = new DrawMethod[]{DrawMethod.Controller, DrawMethod.Pinch, DrawMethod.Index};
-                surfaceOrder = new Surface[]{Surface.Virtual, Surface.None, Surface.Physical};
+
+                conditions = new Condition[]{new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical)};
+
                 break;
-
-        }
-
-        List<Tuple<DrawMethod, Surface>> conditions = new List<Tuple<DrawMethod, Surface>>();
-
-        foreach (DrawMethod dM in drawMethodOrder) {
-            foreach (Surface s in surfaceOrder) {
-                conditions.Add(new Tuple<DrawMethod, Surface>(dM, s));
-            }
         }
 
         return conditions;
     }
+}
+
+
+// Condition class to hold "DrawMethod and Surface"
+public class Condition {
+
+    DrawMethod drawMethod;
+    Surface surface;
+
+    public DrawMethod DrawMethod { // This is a property.
+        get {
+            return drawMethod;
+        }
+    }
+
+    public Surface Surface { // This is a property.
+        get {
+            return surface;
+        }
+    }
+
+    public Condition(DrawMethod dM, Surface s) {
+        drawMethod = dM;
+        surface = s;
+    }
+
 }

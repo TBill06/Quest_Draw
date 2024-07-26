@@ -14,28 +14,39 @@ public enum Status { Idle, ShowStroke, BlankBeforeDraw, Drawing, BlankAfterDraw 
 
 public class TaskManager : MonoBehaviour
 {
-    public GameObject startButton;
-    public GameObject instructions;
+    public GameObject startBlock;
 
-
-    public Hand hand;
+    public Hand rightHand;
+    public Hand leftHand;
+    
+    private Hand hand;
 
     public int numberOfBlocks;
     public float timeToShowStroke;
     public float timeBreakBetweenDrawing;
     
     StrokeManager strokeManager;
-    Experiment experiment;
-    
+    DrawMethod drawMethod;
+    Surface surface;
 
     Status status;
     float timeRemaining;
 
     
     void Start() {
+
+        int left = PlayerPrefs.GetInt("left");
+        if (left == 1)
+            hand = leftHand;
+        else
+            hand = rightHand;
+
+        drawMethod = (DrawMethod) PlayerPrefs.GetInt("DrawMethod");
+        surface = (Surface) PlayerPrefs.GetInt("Surface");
+
         strokeManager = GetComponent<StrokeManager>();
-        experiment = GetComponent<Experiment>();
-        status = Status.Idle;
+
+        ShowStartBlock();
     }
 
 
@@ -52,18 +63,23 @@ public class TaskManager : MonoBehaviour
     }
 
 
+    // Main workflow for going through a condition
     void UpdateStatus() {
 
         switch (status) {
 
             case (Status.BlankBeforeDraw):
 
-                if (hand.GetIndexFingerIsPinching()) {
+                // Switch this based on what the condition is 
+                // (i.e. controller, pinch, or index)
+                // In the Initialize drawing function
+                if (InitializeDrawing()) {
                     status = Status.Drawing;
                 }
 
                 break;
 
+            // Show stroke
             case (Status.ShowStroke):
 
                 if (timeRemaining < 0) {
@@ -73,6 +89,7 @@ public class TaskManager : MonoBehaviour
 
                 break;
             
+            // When drawing
             case (Status.Drawing):
 
                 if (!hand.GetIndexFingerIsPinching()) {
@@ -82,6 +99,7 @@ public class TaskManager : MonoBehaviour
 
                 break;
             
+            // After drawing
             case (Status.BlankAfterDraw):
 
                 if (timeRemaining < 0) {
@@ -98,39 +116,75 @@ public class TaskManager : MonoBehaviour
         timeRemaining -= Time.deltaTime;
     }
 
-    public void StartBlock()
-    {
-        startButton.SetActive(false);
-        GetComponent<HandDrawingTest>().enabled = true;
+    // TODO: Use Tushar this for initializing the drawing vs. stopping
+    // Will probably need public getters and setters in your scripts
+    bool InitializeDrawing() {
+
+        bool isDrawing = false;
+
+        // something like this
+        if (drawMethod == DrawMethod.Pinch) { 
+            if (surface == Surface.None) {
+                // couldn't access this because it's private
+                // draw = GetComponent<PinchDrawingV2>().isDrawing;
+                draw = hand.GetIndexFingerIsPinching();
+            }
+        }
+
+        return isDrawing;
+    }
+
+    // Actually starts the block
+    public void StartBlock() {
+
+        startBlock.SetActive(false);
+        GetComponent<PinchDrawingV2>().enabled = true;
         status = Status.BlankBeforeDraw;
 
     }
 
-    public void ShowStartButton() {
-        strokeManager.HideStroke();
-        instructions.SetActive(false);
-        startButton.SetActive(true);
+    // Shows a prompt at the start of a block
+    public void ShowStartBlock() {
+
+        startBlock.SetActive(true);
+        GetComponent<PinchDrawingV2>().enabled = false;
+        status = Status.Idle;
+        
     }
 
+    // Finish a block of drawings
     void FinishBlock() {
+
+        // Shuffles the stroke order
         strokeManager.ResetOrder();
+
+        // Increment block number
         int block = PlayerPrefs.GetInt("block");
         block++;
 
+        // If we have reached the end number of blocks
         if (block == numberOfBlocks) {
             int conditionState = PlayerPrefs.GetInt("conditionState");
             
+            // Increment the condition state
             conditionState++;
+
+            // Set block back to zero
             block = 0;
 
+            // Set global condition state and block
             PlayerPrefs.SetInt("conditionState", conditionState);
             PlayerPrefs.SetInt("block", block);
 
-            experiment.SetupNextCondition();
+            SceneManager.LoadScene("BetweenConditions");
             
         } else {
+
+            // Otherwise, set global block
             PlayerPrefs.SetInt("block", block);
-            ShowStartButton();
+
+            // Shows the prompt at the start of a new block
+            ShowStartBlock();
         }
     }
 

@@ -27,7 +27,7 @@ public class Setup : MonoBehaviour
         PlayerPrefs.SetInt("block", 0);
         PlayerPrefs.SetInt("conditionState", 0);
 
-        SceneManager.LoadScene("ExperimentTask");
+        SceneManager.LoadScene("BetweenConditions");
     }
 
 
