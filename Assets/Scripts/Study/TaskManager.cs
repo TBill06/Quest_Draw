@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 using Oculus.Interaction.Input;
 
 
-public enum Status { Idle, ShowStroke, BlankBeforeDraw, Drawing, BlankAfterDraw }
+public enum Status { Idle, ShowStroke, BlankBeforeDraw, Drawing, BlankBeforeShowStroke }
 
 
 public class TaskManager : MonoBehaviour
@@ -93,18 +93,18 @@ public class TaskManager : MonoBehaviour
             case (Status.Drawing):
 
                 if (!IsDrawing()) {
-                    status = Status.BlankAfterDraw;
+                    status = Status.BlankBeforeShowStroke;
+                    strokeManager.NextStroke();
                     timeRemaining = timeBreakBetweenDrawing;
                 }
 
                 break;
             
             // After drawing
-            case (Status.BlankAfterDraw):
+            case (Status.BlankBeforeShowStroke):
 
                 if (timeRemaining < 0) {
                     status = Status.ShowStroke;
-                    strokeManager.NextStroke();
                     strokeManager.ShowStroke();
                     timeRemaining = timeToShowStroke;
                 }
@@ -123,13 +123,15 @@ public class TaskManager : MonoBehaviour
         bool isDrawing = false;
 
         // something like this or a switch
-        if (drawMethod == DrawMethod.Pinch) { 
-            if (surface == Surface.None) {
-                // couldn't access this because it's private
-                // draw = GetComponent<PinchDrawingV2>().isDrawing;
-                isDrawing = hand.GetIndexFingerIsPinching();
-            }
-        }
+        // if (drawMethod == DrawMethod.Pinch) { 
+        //     if (surface == Surface.None) {
+        //         // couldn't access this because it's private
+        //         // draw = GetComponent<PinchDrawingV2>().isDrawing;
+        //     }
+        // }
+
+        // Delete this when done
+        isDrawing = hand.GetIndexFingerIsPinching();
 
         return isDrawing;
     }
@@ -139,7 +141,7 @@ public class TaskManager : MonoBehaviour
 
         startBlock.SetActive(false);
         GetComponent<PinchDrawingV2>().enabled = true;
-        status = Status.BlankBeforeDraw;
+        status = Status.BlankBeforeShowStroke;
 
     }
 
@@ -149,7 +151,7 @@ public class TaskManager : MonoBehaviour
         startBlock.SetActive(true);
         GetComponent<PinchDrawingV2>().enabled = false;
         status = Status.Idle;
-                
+
          // Shuffles the stroke order
         strokeManager.ResetOrder();
     }
