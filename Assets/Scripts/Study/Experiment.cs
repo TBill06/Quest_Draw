@@ -41,7 +41,8 @@ public class Experiment : MonoBehaviour
         PlayerPrefs.SetInt("DrawMethod", (int) condition.DrawMethod);
         PlayerPrefs.SetInt("Surface", (int) condition.Surface);
        
-        instructions.SetActive(true);
+
+        SetupInstructions(condition);
     }
 
 
@@ -140,6 +141,62 @@ public class Experiment : MonoBehaviour
         }
 
         return conditions;
+    }
+
+
+    void SetupInstructions(Condition condition) {
+
+
+        string textInstructions = "";
+
+
+        switch (condition.DrawMethod) {
+        
+            case (DrawMethod.Pinch):
+
+                textInstructions += "To begin drawing, touch your index finger and thumb together.\nWhen finished, release your thumb and index finger.";
+
+                break;
+            
+            case (DrawMethod.Index):
+                
+                textInstructions += "Start with your index finger and thumb in an L shape.\nTo begin drawing, bring your thumb into your hand like a \"trigger\" while keeping your index finger extended.\nWhen finished, release your thumb to put your hand back into the L shape.";
+
+                break;
+            
+            case (DrawMethod.Controller):
+
+                textInstructions += "Hold the controller backwards.\nTo begin drawing, pull the \"trigger\" by pressing it with your thumb.\nWhen finished, release the trigger (button).";
+
+                break;
+        }
+
+        textInstructions += "\n\n";
+
+        switch (condition.Surface) {
+        
+            case (Surface.Physical):
+
+                textInstructions += "You will be drawing on a physical surface.\nDraw while keeping contact with the physical surface.";
+
+                break;
+            
+            case (Surface.Virtual):
+                
+                textInstructions += "You will be drawing on a virtual surface.\nDraw while keeping contact with the virtual surface.";
+
+                break;
+            
+            case (Surface.None):
+ 
+                textInstructions += "You will not be be drawing on a surface.\nDraw in free space in front of you.";
+
+                break;
+        }
+
+        TMPro.TextMeshProUGUI topText = instructions.transform.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        topText.text = textInstructions;
+        instructions.SetActive(true);
     }
 }
 

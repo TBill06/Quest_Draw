@@ -148,6 +148,13 @@ public class TaskManager : MonoBehaviour
     // Shows a prompt at the start of a block
     public void ReadyForNextBlock() {
 
+        int block = PlayerPrefs.GetInt("block");
+
+        TMPro.TextMeshProUGUI topText = startBlock.transform.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        topText.text = "Draw Method: " + drawMethod +
+                              "\nSurface: " + surface + 
+                              "\nBlock: " + block;
+
         startBlock.SetActive(true);
         GetComponent<PinchDrawingV2>().enabled = false;
         status = Status.Idle;

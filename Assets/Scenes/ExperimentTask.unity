@@ -2922,6 +2922,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190071815658, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190071815658, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190071815658, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2955,7 +2963,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_text
-      value: Press "Start" to begin.
+      value: 'Memorize the stroke in front of you.
+
+
+        Draw from the blue dot
+        in the direction of the red arrows.
+
+
+        Start drawing when the image
+        disappears.
+
+
+        Press "Start" to begin. '
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_fontSize
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_margin.z
+      value: 0.9864807
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906339, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3015,11 +3046,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0008
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.0008
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalScale.z
@@ -3116,6 +3147,14 @@ PrefabInstance:
     - target: {fileID: 2859147191208444807, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_text
       value: '[Condition here]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147191208444807, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_fontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147191208444807, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2859147191209390399, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_AnchorMax.y
