@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public class FPS : MonoBehaviour
 {
     float deltaTime = 0.0f;
-    float logInterval = 10.0f;
+    float logInterval = 5.0f;
+    int counter = 0;
 
     void Start()
     {
@@ -20,7 +21,8 @@ public class FPS : MonoBehaviour
             GameObject headset = GameObject.Find("CenterEyeAnchor");
             if (headset != null)
             {
-                Debug.Log("Headset position: " + headset.transform.position + " Rotation: " + headset.transform.rotation.eulerAngles + " Scale: " + headset.transform.localScale);
+                Debug.Log($"Headset position {counter}: " + headset.transform.position + " Rotation: " + headset.transform.rotation.eulerAngles + " Scale: " + headset.transform.localScale);
+                counter++;
             }
             yield return new WaitForSeconds(logInterval);
         }
