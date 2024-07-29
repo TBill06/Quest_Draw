@@ -43,6 +43,10 @@ public class VirtualKeyPad : MonoBehaviour
 		
 	}
 
+	public void Enter() {
+		words = "";
+	}
+
 	public void ShowVirtualKeyPad(){
 		vkCanvas.SetActive(true);
 	}
