@@ -29,10 +29,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4771431038655527295}
+  - {fileID: 8365029845567488389}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &3086821013314207113
+--- !u!1001 &2087310914021705075
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -42,15 +42,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5966767256255086298, guid: 7aea5af3959f30f459687f11545e4d83, type: 3}
       propertyPath: m_Name
-      value: Cube
-      objectReference: {fileID: 0}
-    - target: {fileID: 5966767256255086298, guid: 7aea5af3959f30f459687f11545e4d83, type: 3}
-      propertyPath: m_TagString
-      value: Cap
-      objectReference: {fileID: 0}
-    - target: {fileID: 7557339674584810742, guid: 7aea5af3959f30f459687f11545e4d83, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.02
+      value: VRBoard
       objectReference: {fileID: 0}
     - target: {fileID: 7557339674584810742, guid: 7aea5af3959f30f459687f11545e4d83, type: 3}
       propertyPath: m_LocalPosition.x
@@ -97,8 +89,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7aea5af3959f30f459687f11545e4d83, type: 3}
---- !u!4 &4771431038655527295 stripped
+--- !u!4 &8365029845567488389 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7557339674584810742, guid: 7aea5af3959f30f459687f11545e4d83, type: 3}
-  m_PrefabInstance: {fileID: 3086821013314207113}
+  m_PrefabInstance: {fileID: 2087310914021705075}
   m_PrefabAsset: {fileID: 0}

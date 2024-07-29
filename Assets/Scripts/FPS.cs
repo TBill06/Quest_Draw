@@ -1,8 +1,30 @@
 using UnityEngine;
+using Meta.XR.MRUtilityKit;
+using System.Collections;
+using System.Collections.Generic;
 
 public class FPS : MonoBehaviour
 {
     float deltaTime = 0.0f;
+    float logInterval = 10.0f;
+
+    void Start()
+    {
+        StartCoroutine(LogHeadsetPositionPeriodically());
+    }
+
+    IEnumerator LogHeadsetPositionPeriodically()
+    {
+        while (true)
+        {
+            GameObject headset = GameObject.Find("CenterEyeAnchor");
+            if (headset != null)
+            {
+                Debug.Log("Headset position: " + headset.transform.position + " Rotation: " + headset.transform.rotation.eulerAngles + " Scale: " + headset.transform.localScale);
+            }
+            yield return new WaitForSeconds(logInterval);
+        }
+    }
 
     void Update()
     {
@@ -29,5 +51,27 @@ public class FPS : MonoBehaviour
 
         // Draw the text on the screen
         GUI.Label(rect, text, style);
+    }
+
+    public void OnSceneInitialized()
+    {
+        Debug.Log("Scene is ready!");
+        MRUKRoom room = MRUK.Instance.GetCurrentRoom();
+        if (room != null)
+        {
+            Debug.Log("Current room is " + room.name + " Position: " + room.transform.position + " Rotation: " + room.transform.rotation.eulerAngles + " Scale: " + room.transform.localScale);
+            List<MRUKAnchor> anchors = room.Anchors;
+            foreach (MRUKAnchor anchor in anchors)
+            {
+                if (anchor.Label.ToString() == "WALL_ART")
+                {
+                    Debug.Log("Wall Anchor: " + anchor.Label + " Position: " + anchor.transform.position + " Rotation: " + anchor.transform.rotation.eulerAngles + " Scale: " + anchor.transform.localScale);
+                }
+                if (anchor.Label.ToString() == "FLOOR")
+                {
+                    Debug.Log("Floor Anchor: " + anchor.Label + " Position: " + anchor.transform.position + " Rotation: " + anchor.transform.rotation.eulerAngles + " Scale: " + anchor.transform.localScale);
+                }
+            }
+        }
     }
 }

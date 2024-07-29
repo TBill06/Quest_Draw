@@ -31,6 +31,7 @@ public class TestRB : MonoBehaviour
     private Vector3 edgePoint;
     private BoxCollider boxCollider;
     private MRUKAnchor boardObject;
+    private LineRenderer lineRenderer;
 
     void Start()
     {
@@ -39,6 +40,13 @@ public class TestRB : MonoBehaviour
         {
             boxCollider = board.GetComponent<BoxCollider>();
         }
+
+        GameObject c1 = new GameObject("Line");
+        lineRenderer = c1.AddComponent<LineRenderer>();
+        lineRenderer.material = tubeMaterial;
+        lineRenderer.startWidth = 0.001f;
+        lineRenderer.endWidth = 0.001f;
+        lineRenderer.positionCount = 2;
     }
 
     void Update()
@@ -64,7 +72,7 @@ public class TestRB : MonoBehaviour
             midPoint -= indexDirection * 0.04f;
             distance = Vector3.Distance(pose1.position, pose2.position);
 
-            float length = (distance / 2) + 0.05f;
+            float length = (distance / 2) + 0.055f;
             edgePoint = midPoint - (indexDirection * length);
 
             capsule.transform.position = midPoint;
@@ -72,22 +80,26 @@ public class TestRB : MonoBehaviour
             capsule.transform.localScale = new Vector3(0.008f, length, 0.008f);
 
             Ray ray = new Ray(edgePoint, indexDirection);
-            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2))
+            if(boxCollider != null)
             {
-                if(createNewTube)
+                if(boxCollider.Raycast(ray, out RaycastHit hit, length*2f))
                 {
-                    GameObject tubeObject = new GameObject("Tube");
-                    vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
-                    currentTube = tubeObject.AddComponent<ProceduralTube>();
-                    currentTube.material = tubeMaterial;
-                    createNewTube = false;
+                    if(createNewTube)
+                    {
+                        GameObject tubeObject = new GameObject("Tube");
+                        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
+                        currentTube = tubeObject.AddComponent<ProceduralTube>();
+                        currentTube.material = tubeMaterial;
+                        createNewTube = false;
+                    }
+                    UpdateLine(hit.point, hit.normal);   
+                    lineRenderer.SetPosition(0, edgePoint); 
+                    lineRenderer.SetPosition(1, hit.point);
                 }
-                UpdateLine(hit.point, hit.normal);    
-                
-            }
-            else
-            {
-                createNewTube = true;
+                else
+                {
+                    createNewTube = true;
+                }
             }
         }
         wasPinching = currentlyPinching;
@@ -96,6 +108,7 @@ public class TestRB : MonoBehaviour
     void UpdateLine(Vector3 point, Vector3 normal)
     {
         Vector3 offsetPoint = point + normal * 0.01f;
+        Debug.Log("R-- Hit point: "+point+" Normal: "+normal+" Offset point: "+offsetPoint);
         currentTube.AddPoint(offsetPoint);
     }
     

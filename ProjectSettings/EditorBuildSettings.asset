@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Procedural.unity
     guid: acd4dfe9ba2f5e745ab3e3e0fdbc38f2
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/VirtualSurfaceDraw-C2.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 0
@@ -35,9 +35,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Test.unity
     guid: 619645f99b327b446b1cf43acd055625
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PhysicalSurfaceDraw-C3-Colliders.unity
     guid: 7fa458907c2a0554380e6c680093be70
+  - enabled: 0
+    path: Assets/Scenes/NoSurfaceDraw-C1.unity
+    guid: fa9bb0e440835ef45a1b2c85b06ed2f8
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 60c0c0a39b9701348b6b8af07a2d3cb2, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 85c8cff8dcf922e44b954a3b07da70ee, type: 2}

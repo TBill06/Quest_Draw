@@ -31,6 +31,7 @@ public class VSurfacePinchV2 : MonoBehaviour
     private Vector3 edgePoint;
     private BoxCollider boxCollider;
     private MRUKAnchor boardObject;
+    private LineRenderer lineRenderer;
 
     void Start()
     {
@@ -39,6 +40,13 @@ public class VSurfacePinchV2 : MonoBehaviour
         {
             boxCollider = board.GetComponent<BoxCollider>();
         }
+
+        GameObject c1 = new GameObject("Line");
+        lineRenderer = c1.AddComponent<LineRenderer>();
+        lineRenderer.material = tubeMaterial;
+        lineRenderer.startWidth = 0.001f;
+        lineRenderer.endWidth = 0.001f;
+        lineRenderer.positionCount = 2;
     }
 
     void Update()
@@ -61,7 +69,7 @@ public class VSurfacePinchV2 : MonoBehaviour
             midPoint -= indexDirection * 0.04f;
             distance = Vector3.Distance(pose1.position, pose2.position);
 
-            float length = (distance / 2) + 0.05f;
+            float length = (distance / 2) + 0.055f;
             edgePoint = midPoint - (indexDirection * length);
 
             capsule.transform.position = midPoint;
@@ -69,33 +77,40 @@ public class VSurfacePinchV2 : MonoBehaviour
             capsule.transform.localScale = new Vector3(0.008f, length, 0.008f);
 
             Ray ray = new Ray(edgePoint, indexDirection);
-            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2))
+            if(boxCollider != null)
             {
-                if(createNewTube)
+                if(boxCollider.Raycast(ray, out RaycastHit hit, length*2f))
                 {
-                    GameObject tubeObject = new GameObject("Tube");
-                    vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
-                    currentTube = tubeObject.AddComponent<ProceduralTube>();
-                    currentTube.material = tubeMaterial;
-                    createNewTube = false;
+                    if(createNewTube)
+                    {
+                        GameObject tubeObject = new GameObject("Tube");
+                        vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
+                        currentTube = tubeObject.AddComponent<ProceduralTube>();
+                        currentTube.material = tubeMaterial;
+                        createNewTube = false;
+                    }
+                    UpdateLine(hit.point, hit.normal);    
+                    lineRenderer.SetPosition(0, edgePoint);
+                    lineRenderer.SetPosition(1, hit.point);
+                    Vector3 offsetPoint1 = hit.point + hit.normal * 0.01f;
+                    Debug.Log("L1-- Hit point: "+hit.point+" Normal: "+hit.normal+" Offset point: "+offsetPoint1);
                 }
-                UpdateLine(hit.point, hit.normal);    
-                
-            }
-            else
-            {
-                createNewTube = true;
+                else
+                {
+                    createNewTube = true;
+                }
             }
         }
         wasPinching = currentlyPinching;
     }
 
     void UpdateLine(Vector3 point, Vector3 normal)
-    {
+    {   
         Vector3 offsetPoint = point + normal * 0.01f;
-        Vector2 point2D = new Vector2(offsetPoint.x, offsetPoint.y);
+        Vector2 point2D = new Vector2(offsetPoint.y, offsetPoint.z);
         Vector2 filterPoint = vector2Filter.Filter(point2D);
-        Vector3 finalPoint = new Vector3(filterPoint.x, filterPoint.y, offsetPoint.z);
+        Vector3 finalPoint = new Vector3(offsetPoint.x, filterPoint.x, filterPoint.y);
+        Debug.Log("L2-- Hit point: "+point+" Normal: "+normal+" Offset point: "+offsetPoint+" Filtered point: "+finalPoint);
         currentTube.AddPoint(finalPoint);
     }
     
