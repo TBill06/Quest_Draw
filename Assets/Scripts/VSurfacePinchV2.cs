@@ -13,7 +13,7 @@ using Meta.XR.MRUtilityKit;
 public class VSurfacePinchV2 : MonoBehaviour
 {
     public Hand hand;
-    public Material tubeMaterial; 
+    public Material tubeMaterial;
     public GameObject board;
     public GameObject capsule;
     public float filterFrequency = 90.0f;
