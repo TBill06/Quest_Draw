@@ -106,6 +106,7 @@ public class TaskManager : MonoBehaviour
 
                 if (timeRemaining < 0) {
                     status = Status.ShowStroke;
+                    DeleteTubes();
                     strokeManager.ShowStroke();
                     timeRemaining = timeToShowStroke;
                 }
@@ -123,16 +124,18 @@ public class TaskManager : MonoBehaviour
 
         bool isDrawing = false;
 
-        // something like this or a switch
-        // if (drawMethod == DrawMethod.Pinch) { 
-        //     if (surface == Surface.None) {
-        //         // couldn't access this because it's private
-        //         // draw = GetComponent<PinchDrawingV2>().isDrawing;
-        //     }
-        // }
-
-        // Delete this when done
-        isDrawing = hand.GetIndexFingerIsPinching();
+        if (drawMethod == DrawMethod.Pinch)
+        {
+            isDrawing = GetComponent<PinchDrawingV2>().isDrawing;
+        }
+        else if (drawMethod == DrawMethod.Index)
+        {
+            isDrawing = GetComponent<PointDrawingV2>().isDrawing;
+        }
+        else if (drawMethod == DrawMethod.Controller)
+        {
+            isDrawing = GetComponent<ControllerDrawing>().isDrawing;
+        }
 
         return isDrawing;
     }
@@ -141,7 +144,7 @@ public class TaskManager : MonoBehaviour
     public void StartBlock() {
 
         startBlock.SetActive(false);
-        GetComponent<PinchDrawingV2>().enabled = true;
+        LoadScripts(drawMethod);
         status = Status.BlankBeforeShowStroke;
         timeRemaining = timeBreakBetweenDrawing;
 
@@ -158,10 +161,10 @@ public class TaskManager : MonoBehaviour
                               "\nBlock: " + block;
 
         startBlock.SetActive(true);
-        GetComponent<PinchDrawingV2>().enabled = false;
+        OffloadScripts(drawMethod);
         status = Status.Idle;
 
-         // Shuffles the stroke order
+        // Shuffles the stroke order
         strokeManager.ResetOrder();
     }
 
@@ -195,6 +198,57 @@ public class TaskManager : MonoBehaviour
 
             // Shows the prompt at the start of a new block
             ReadyForNextBlock();
+        }
+    }
+
+    void LoadScripts(DrawMethod drawMethod)
+    {
+        switch(drawMethod)
+        {
+            case (DrawMethod.Pinch):
+
+                GetComponent<PinchDrawingV2>().enabled = true;
+                break;
+
+            case (DrawMethod.Index):
+
+                GetComponent<PointDrawingV2>().enabled = true;
+                break;
+
+            case (DrawMethod.Controller):
+
+                GetComponent<ControllerDrawing>().enabled = true;
+                break;
+        }
+    }
+
+    void OffloadScripts(DrawMethod drawMethod)
+    {
+        switch(drawMethod)
+        {
+            case (DrawMethod.Pinch):
+
+                GetComponent<PinchDrawingV2>().enabled = false;
+                break;
+
+            case (DrawMethod.Index):
+
+                GetComponent<PointDrawingV2>().enabled = false;
+                break;
+
+            case (DrawMethod.Controller):
+
+                GetComponent<ControllerDrawing>().enabled = false;
+                break;
+        }
+    }
+
+    void DeleteTubes()
+    {
+        GameObject[] tubes = GameObject.FindGameObjectsWithTag("Tube");
+        foreach (GameObject tube in tubes)
+        {
+            Destroy(tube);
         }
     }
 

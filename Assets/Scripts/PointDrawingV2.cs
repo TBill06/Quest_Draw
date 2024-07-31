@@ -11,17 +11,44 @@ using Unity.ProceduralTube;
 // Parameters: Hand, tubeMaterial.
 public class PointDrawingV2 : MonoBehaviour
 {
-    public Hand hand;
-    public Material tubeMaterial;    
+    public Hand leftHand;
+    public Hand rightHand;
+    public Material tubeMaterial;
+    public GameObject poseDetector_L;
+    public GameObject poseDetector_R;
     public float filterFrequency = 90.0f;
     public float minCutoff = 1.0f;
     public float beta = 10f;
     public float dcutoff = 1.0f;
     
     private OneEuroFilter<Vector3> vector3Filter;
+    private Hand hand;
     private bool indexPointerPoseDetected = false;
-    private bool isDrawing = false;
+    private bool _isDrawing = false;
     private ProceduralTube currentTube;
+
+    public bool isDrawing
+    {
+        get { return _isDrawing; }
+        set { _isDrawing = value; }
+    }
+
+    void Start()
+    {
+        int left = PlayerPrefs.GetInt("left");
+        if (left == 1)
+        {
+            hand = leftHand;
+            poseDetector_L.SetActive(true);
+            poseDetector_R.SetActive(false);
+        }
+        else
+        {
+            hand = rightHand;
+            poseDetector_L.SetActive(false);
+            poseDetector_R.SetActive(true);
+        }
+    }
 
     void Update()
     {
@@ -53,6 +80,7 @@ public class PointDrawingV2 : MonoBehaviour
         // Initialize the filter and the tube object
         vector3Filter = new OneEuroFilter<Vector3>(filterFrequency,minCutoff,beta,dcutoff);
         GameObject tubeObject = new GameObject("Tube");
+        tubeObject.tag = "Tube";
         currentTube = tubeObject.AddComponent<ProceduralTube>();
         currentTube.material = tubeMaterial;
     }

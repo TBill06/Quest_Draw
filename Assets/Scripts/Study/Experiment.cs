@@ -50,28 +50,31 @@ public class Experiment : MonoBehaviour
     public void StartNextCondition() {
 
         // Tushar: Uncomment this when ready
-        // switch (condition.Surface) {
-        //     case (Surface.Physical):
+        switch (condition.Surface) {
+            case (Surface.Physical):
 
-        //         // Load the next condition scene: Physical Surface Draw
-        //         SceneManager.LoadScene("PhysicalSurfaceDraw-C3-Colliders");
-        //         break;
+                Debug.Log("Physical Surface");
+                // Load the next condition scene: Physical Surface Draw
+                // SceneManager.LoadScene("PhysicalSurfaceDraw-C3-Colliders");
+                break;
             
-        //     case (Surface.Virtual):
+            case (Surface.Virtual):
 
-        //         // Load the next condition scene: Virtual Surface Draw
-        //         SceneManager.LoadScene("VirtualSurfaceDraw-C2-Colliders");
-        //         break;
+                Debug.Log("Virtual Surface");
+                // Load the next condition scene: Virtual Surface Draw
+                // SceneManager.LoadScene("VirtualSurfaceDraw-C2-Colliders");
+                break;
             
-        //     case (Surface.None):
+            case (Surface.None):
 
-        //         // Load the next condition scene: No Surface Draw
-        //         SceneManager.LoadScene("NoSurfaceDraw-C1");
-        //         break;
-        // }
+                Debug.Log("No Surface");
+                // Load the next condition scene: No Surface Draw
+                SceneManager.LoadScene("NoSurfaceDraw-C1");
+                break;
+        }
 
         // Delete this when finished
-        SceneManager.LoadScene("ExperimentTask");
+        // SceneManager.LoadScene("ExperimentTask");
 
     }
 

@@ -12,8 +12,14 @@ public class ControllerDrawing : MonoBehaviour
 {
     public Material leftTubeMaterial;
     public Material rightTubeMaterial;
-    private bool isDrawing = false;
+    private bool _isDrawing = false;
     private ProceduralTube currentTube;
+
+    public bool isDrawing
+    {
+        get { return _isDrawing; }
+        set { _isDrawing = value; }
+    }
 
     void Update()
     {
@@ -49,6 +55,7 @@ public class ControllerDrawing : MonoBehaviour
         isDrawing = true;
 
         GameObject tubeObject = new GameObject("Tube");
+        tubeObject.tag = "Tube";
         currentTube = tubeObject.AddComponent<ProceduralTube>();
         currentTube.material = material;
     }
