@@ -24,6 +24,7 @@ public class TaskManager : MonoBehaviour
     public int numberOfBlocks;
     public float timeToShowStroke;
     public float timeBreakBetweenDrawing;
+
     
     StrokeManager strokeManager;
     DrawMethod drawMethod;
@@ -142,6 +143,7 @@ public class TaskManager : MonoBehaviour
         startBlock.SetActive(false);
         GetComponent<PinchDrawingV2>().enabled = true;
         status = Status.BlankBeforeShowStroke;
+        timeRemaining = timeBreakBetweenDrawing;
 
     }
 
