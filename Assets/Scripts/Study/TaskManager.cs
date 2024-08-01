@@ -32,6 +32,7 @@ public class TaskManager : MonoBehaviour
 
     Status status;
     float timeRemaining;
+    private Type activeScript;
 
     
     void Start() {
@@ -54,10 +55,12 @@ public class TaskManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Status: " + status);
         if (status != Status.Idle) {
             if (strokeManager.HasNext()) {
                 UpdateStatus();
             } else {
+                DeleteTubes();
                 FinishBlock();
             }
         }
@@ -74,6 +77,7 @@ public class TaskManager : MonoBehaviour
                 // Switch this based on what the condition is 
                 // (i.e. controller, pinch, or index)
                 // In the IsDrawing function
+                LoadScripts(surface, drawMethod);
                 if (IsDrawing()) {
                     status = Status.Drawing;
                 }
@@ -104,6 +108,7 @@ public class TaskManager : MonoBehaviour
             // After drawing
             case (Status.BlankBeforeShowStroke):
 
+                OffloadScripts(surface, drawMethod);
                 if (timeRemaining < 0) {
                     status = Status.ShowStroke;
                     DeleteTubes();
@@ -118,23 +123,16 @@ public class TaskManager : MonoBehaviour
         timeRemaining -= Time.deltaTime;
     }
 
-    // TODO: Use Tushar this for initializing the drawing vs. stopping
-    // Will probably need public getters and setters in your scripts
+    // Checks if the user is currently drawing
     bool IsDrawing() {
 
         bool isDrawing = false;
 
-        if (drawMethod == DrawMethod.Pinch)
+        if (activeScript != null)
         {
-            isDrawing = GetComponent<PinchDrawingV2>().isDrawing;
-        }
-        else if (drawMethod == DrawMethod.Index)
-        {
-            isDrawing = GetComponent<PointDrawingV2>().isDrawing;
-        }
-        else if (drawMethod == DrawMethod.Controller)
-        {
-            isDrawing = GetComponent<ControllerDrawing>().isDrawing;
+            var isDrawingProperty = activeScript.GetProperty("isDrawing");
+            var component = GetComponent(activeScript);
+            isDrawing = (bool)isDrawingProperty.GetValue(component);
         }
 
         return isDrawing;
@@ -144,7 +142,7 @@ public class TaskManager : MonoBehaviour
     public void StartBlock() {
 
         startBlock.SetActive(false);
-        LoadScripts(drawMethod);
+        // LoadScripts(drawMethod);
         status = Status.BlankBeforeShowStroke;
         timeRemaining = timeBreakBetweenDrawing;
 
@@ -161,7 +159,7 @@ public class TaskManager : MonoBehaviour
                               "\nBlock: " + block;
 
         startBlock.SetActive(true);
-        OffloadScripts(drawMethod);
+        // OffloadScripts(drawMethod);
         status = Status.Idle;
 
         // Shuffles the stroke order
@@ -201,50 +199,97 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    void LoadScripts(DrawMethod drawMethod)
+    void LoadScripts(Surface surface, DrawMethod drawMethod)
     {
-        switch(drawMethod)
+        switch (surface)
         {
-            case (DrawMethod.Pinch):
+            case (Surface.None):
+                switch (drawMethod)
+                {
+                    case (DrawMethod.Pinch):
+                        GetComponent<PinchDrawingV2>().enabled = true;
+                        activeScript = typeof(PinchDrawingV2);
+                        break;
 
-                GetComponent<PinchDrawingV2>().enabled = true;
+                    case (DrawMethod.Index):
+                        GetComponent<PointDrawingV2>().enabled = true;
+                        activeScript = typeof(PointDrawingV2);
+                        break;
+
+                    case (DrawMethod.Controller):
+                        GetComponent<ControllerDrawing>().enabled = true;
+                        activeScript = typeof(ControllerDrawing);
+                        break;
+                }
                 break;
+            
+            case (Surface.Virtual):
+            case (Surface.Physical):
+                switch (drawMethod)
+                {
+                    case (DrawMethod.Pinch):
+                        GetComponent<VSurfacePinchV2>().enabled = true;
+                        activeScript = typeof(VSurfacePinchV2);
+                        break;
 
-            case (DrawMethod.Index):
+                    case (DrawMethod.Index):
+                        GetComponent<VSurfacePointV2>().enabled = true;
+                        activeScript = typeof(VSurfacePointV2);
+                        break;
 
-                GetComponent<PointDrawingV2>().enabled = true;
-                break;
-
-            case (DrawMethod.Controller):
-
-                GetComponent<ControllerDrawing>().enabled = true;
+                    case (DrawMethod.Controller):
+                        GetComponent<VSurfaceControllerV2>().enabled = true;
+                        activeScript = typeof(VSurfaceControllerV2);
+                        break;
+                }
                 break;
         }
     }
 
-    void OffloadScripts(DrawMethod drawMethod)
+    void OffloadScripts(Surface surface, DrawMethod drawMethod)
     {
-        switch(drawMethod)
+        switch (surface)
         {
-            case (DrawMethod.Pinch):
+            case (Surface.None):
+                switch (drawMethod)
+                {
+                    case (DrawMethod.Pinch):
+                        GetComponent<PinchDrawingV2>().enabled = false;
+                        break;
 
-                GetComponent<PinchDrawingV2>().enabled = false;
+                    case (DrawMethod.Index):
+                        GetComponent<PointDrawingV2>().enabled = false;
+                        break;
+
+                    case (DrawMethod.Controller):
+                        GetComponent<ControllerDrawing>().enabled = false;
+                        break;
+                }
                 break;
+            
+            case (Surface.Virtual):
+            case (Surface.Physical):
+                switch (drawMethod)
+                {
+                    case (DrawMethod.Pinch):
+                        GetComponent<VSurfacePinchV2>().enabled = false;
+                        break;
 
-            case (DrawMethod.Index):
+                    case (DrawMethod.Index):
+                        GetComponent<VSurfacePointV2>().enabled = false;
+                        break;
 
-                GetComponent<PointDrawingV2>().enabled = false;
-                break;
-
-            case (DrawMethod.Controller):
-
-                GetComponent<ControllerDrawing>().enabled = false;
+                    case (DrawMethod.Controller):
+                        GetComponent<VSurfaceControllerV2>().enabled = false;
+                        break;
+                }
                 break;
         }
     }
 
     void DeleteTubes()
     {
+        Debug.Log("Deleting tubes");
         GameObject[] tubes = GameObject.FindGameObjectsWithTag("Tube");
         foreach (GameObject tube in tubes)
         {

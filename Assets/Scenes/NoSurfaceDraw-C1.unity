@@ -2388,7 +2388,7 @@ MonoBehaviour:
   startBlock: {fileID: 88155937}
   rightHand: {fileID: 1343137693}
   leftHand: {fileID: 495963415}
-  numberOfBlocks: 3
+  numberOfBlocks: 1
   timeToShowStroke: 5
   timeBreakBetweenDrawing: 2
 --- !u!114 &1607494502
@@ -2407,16 +2407,6 @@ MonoBehaviour:
   strokes:
   - {fileID: 1808596027}
   - {fileID: 892296117}
-  - {fileID: 528080047}
-  - {fileID: 1694463490}
-  - {fileID: 504890549}
-  - {fileID: 1341960203}
-  - {fileID: 1801585659}
-  - {fileID: 377326622}
-  - {fileID: 1253273823}
-  - {fileID: 1444828298}
-  - {fileID: 1071138631}
-  - {fileID: 867035122}
 --- !u!114 &1607494503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2941,12 +2931,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2483171112407822886, guid: f54012181eacade4ea242c65f804720f, type: 3}
+      propertyPath: _sharpenType
+      value: 65536
+      objectReference: {fileID: 0}
+    - target: {fileID: 2483171112407822886, guid: f54012181eacade4ea242c65f804720f, type: 3}
       propertyPath: _localDimming
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2483171112407822886, guid: f54012181eacade4ea242c65f804720f, type: 3}
       propertyPath: _trackingOriginType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2483171112407822886, guid: f54012181eacade4ea242c65f804720f, type: 3}
       propertyPath: enableDynamicResolution
@@ -2954,11 +2948,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2483171112407822886, guid: f54012181eacade4ea242c65f804720f, type: 3}
       propertyPath: maxDynamicResolutionScale
-      value: 1.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2483171112407822886, guid: f54012181eacade4ea242c65f804720f, type: 3}
       propertyPath: minDynamicResolutionScale
-      value: 0.7
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2483171112407822886, guid: f54012181eacade4ea242c65f804720f, type: 3}
       propertyPath: requestScenePermissionOnStartup

@@ -12,8 +12,11 @@ public class ControllerDrawing : MonoBehaviour
 {
     public Material leftTubeMaterial;
     public Material rightTubeMaterial;
+    private Vector3 rotationCheck;
     private bool _isDrawing = false;
     private ProceduralTube currentTube;
+    private Vector3 lastDrawPoint;
+    private bool isFirstPoint = true;
 
     public bool isDrawing
     {
@@ -23,6 +26,7 @@ public class ControllerDrawing : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("ControllerDrawing");
         OVRInput.Controller activeController = OVRInput.Controller.None;
         Material material = null;
         if (OVRInput.Get(OVRInput.RawButton.RHandTrigger))
@@ -53,6 +57,7 @@ public class ControllerDrawing : MonoBehaviour
     void StartDrawing(Material material)
     {
         isDrawing = true;
+        isFirstPoint = true;
 
         GameObject tubeObject = new GameObject("Tube");
         tubeObject.tag = "Tube";
@@ -67,9 +72,29 @@ public class ControllerDrawing : MonoBehaviour
         {
             Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(controller);
             Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(controller);
+
             // Draw a point 0.095m below the controller (at the tip)
-            Vector3 downDirection = controllerRotation * Quaternion.Euler(45,5,0) * new Vector3(-0.01f, -1, 0);
+            if (controller == OVRInput.Controller.LTouch)
+            {
+                rotationCheck = new Vector3(45, 0, -5);
+            }
+            else
+            {
+                rotationCheck = new Vector3(45, 0, 5);
+            }
+            Vector3 downDirection = controllerRotation * Quaternion.Euler(rotationCheck) * new Vector3(-0.01f, -1, 0);
             Vector3 drawpoint = controllerPosition + downDirection * 0.095f;
+            
+            if (!isFirstPoint)
+            {
+                drawpoint = Vector3.Lerp(lastDrawPoint, drawpoint, 0.5f);
+                lastDrawPoint = drawpoint;
+            }
+            else
+            {
+                lastDrawPoint = drawpoint;
+                isFirstPoint = false;
+            }
             currentTube.AddPoint(drawpoint);
         }
     }

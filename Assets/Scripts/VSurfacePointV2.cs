@@ -13,8 +13,11 @@ using Meta.XR.MRUtilityKit;
 // Parameters: Hand, tubeMaterial.
 public class VSurfacePointV2 : MonoBehaviour
 {
-    public Hand hand;
-    public Material tubeMaterial; 
+    public Hand leftHand;
+    public Hand rightHand;
+    public Material tubeMaterial;
+    public GameObject poseDetector_L;
+    public GameObject poseDetector_R;
     public GameObject board;
     public GameObject capsule;
     public float filterFrequency = 90.0f;
@@ -23,19 +26,39 @@ public class VSurfacePointV2 : MonoBehaviour
     public float dcutoff = 1.0f;
 
     private OneEuroFilter<Vector2> vector2Filter;
+    private Hand hand;
     private ProceduralTube currentTube;
     private bool wasPointing = false;
     private bool createNewTube = false;
     private bool indexPointerPoseDetected = false;
-    private Vector3 midPoint;
-    private Vector3 indexDirection;
-    private float distance;
-    private Vector3 edgePoint;
+    private bool _isDrawing = false;
+    private Vector3 midPoint, indexDirection, edgePoint;
+    private float distance, length;
     private BoxCollider boxCollider;
     private MRUKAnchor boardObject;
 
+    public bool isDrawing
+    {
+        get { return _isDrawing; }
+        set { _isDrawing = value; }
+    }
+
     void Start()
     {
+        int left = PlayerPrefs.GetInt("left");
+        if (left == 1)
+        {
+            hand = leftHand;
+            poseDetector_L.SetActive(true);
+            poseDetector_R.SetActive(false);
+        }
+        else
+        {
+            hand = rightHand;
+            poseDetector_L.SetActive(false);
+            poseDetector_R.SetActive(true);
+        }
+
         vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
         if(board != null)
         {
@@ -62,7 +85,7 @@ public class VSurfacePointV2 : MonoBehaviour
             midPoint -= indexDirection * 0.04f;
             distance = Vector3.Distance(pose1.position, pose2.position);
 
-            float length = (distance / 2) + 0.05f;
+            length = (distance / 2) + 0.05f;
             edgePoint = midPoint - (indexDirection * length);
 
             capsule.transform.position = midPoint;
@@ -74,7 +97,9 @@ public class VSurfacePointV2 : MonoBehaviour
             {
                 if(createNewTube)
                 {
+                    isDrawing = true;
                     GameObject tubeObject = new GameObject("Tube");
+                    tubeObject.tag = "Tube";
                     vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
                     currentTube = tubeObject.AddComponent<ProceduralTube>();
                     currentTube.material = tubeMaterial;
@@ -85,6 +110,7 @@ public class VSurfacePointV2 : MonoBehaviour
             }
             else
             {
+                isDrawing = false;
                 createNewTube = true;
             }
         }

@@ -55,14 +55,14 @@ public class Experiment : MonoBehaviour
 
                 Debug.Log("Physical Surface");
                 // Load the next condition scene: Physical Surface Draw
-                // SceneManager.LoadScene("PhysicalSurfaceDraw-C3-Colliders");
+                SceneManager.LoadScene("PhysicalSurfaceDraw-C3-Colliders");
                 break;
             
             case (Surface.Virtual):
 
                 Debug.Log("Virtual Surface");
                 // Load the next condition scene: Virtual Surface Draw
-                // SceneManager.LoadScene("VirtualSurfaceDraw-C2-Colliders");
+                SceneManager.LoadScene("VirtualSurfaceDraw-C2");
                 break;
             
             case (Surface.None):
