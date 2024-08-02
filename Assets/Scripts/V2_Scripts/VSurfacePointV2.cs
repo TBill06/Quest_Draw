@@ -68,6 +68,9 @@ public class VSurfacePointV2 : MonoBehaviour
 
     void Update()
     {
+        if (!ScriptManager.shouldRun)
+            return;
+            
         if(indexPointerPoseDetected)
         {
             if(!wasPointing)

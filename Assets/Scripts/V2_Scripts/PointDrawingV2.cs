@@ -52,6 +52,9 @@ public class PointDrawingV2 : MonoBehaviour
 
     void Update()
     {
+        if (!ScriptManager.shouldRun)
+            return;
+            
         if (indexPointerPoseDetected)
         {
             if (!isDrawing)

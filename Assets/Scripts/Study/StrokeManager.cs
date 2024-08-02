@@ -12,7 +12,7 @@ public class StrokeManager : MonoBehaviour
     public GameObject background;
     public List<Stroke> strokes;
     
-    private int[] order = {0,1,2,3,4,5,6,7,8,9,10,11};
+    private int[] order = {0,1};
     private int position = 0;
 
 

@@ -40,6 +40,9 @@ public class PinchDrawingV2 : MonoBehaviour
 
     void Update()
     {
+        if (!ScriptManager.shouldRun)
+            return;
+            
         if (hand.GetIndexFingerIsPinching())
         {
             if (!isDrawing)

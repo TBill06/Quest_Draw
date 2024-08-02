@@ -41,6 +41,9 @@ public class VSurfaceControllerV2 : MonoBehaviour
 
     void Update()
     {
+        if (!ScriptManager.shouldRun)
+            return;
+            
         OVRInput.Controller activeController = OVRInput.Controller.None;
         Material material = null;
         if (OVRInput.Get(OVRInput.RawButton.RHandTrigger))

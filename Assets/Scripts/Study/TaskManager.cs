@@ -11,6 +11,10 @@ using Oculus.Interaction.Input;
 
 public enum Status { Idle, ShowStroke, BlankBeforeDraw, Drawing, BlankBeforeShowStroke }
 
+public static class ScriptManager
+{
+    public static bool shouldRun { get; set; } = false;
+}
 
 public class TaskManager : MonoBehaviour
 {
@@ -33,8 +37,9 @@ public class TaskManager : MonoBehaviour
     Status status;
     float timeRemaining;
     private Type activeScript;
+    private bool deleteTubes = true;
 
-    
+    // Start sets the hand, draw method, surface, and stroke manager
     void Start() {
 
         int left = PlayerPrefs.GetInt("left");
@@ -55,12 +60,11 @@ public class TaskManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Status: " + status);
         if (status != Status.Idle) {
             if (strokeManager.HasNext()) {
                 UpdateStatus();
             } else {
-                DeleteTubes();
+                if (deleteTubes) DeleteTubes();
                 FinishBlock();
             }
         }
@@ -72,18 +76,6 @@ public class TaskManager : MonoBehaviour
 
         switch (status) {
 
-            case (Status.BlankBeforeDraw):
-
-                // Switch this based on what the condition is 
-                // (i.e. controller, pinch, or index)
-                // In the IsDrawing function
-                LoadScripts(surface, drawMethod);
-                if (IsDrawing()) {
-                    status = Status.Drawing;
-                }
-
-                break;
-
             // Show stroke
             case (Status.ShowStroke):
 
@@ -93,12 +85,25 @@ public class TaskManager : MonoBehaviour
                 }
 
                 break;
+
+            case (Status.BlankBeforeDraw):
+
+                // Switch this based on what the condition is 
+                // (i.e. controller, pinch, or index)
+                // In the IsDrawing function
+                ScriptManager.shouldRun = true;
+                if (IsDrawing()) {
+                    status = Status.Drawing;
+                }
+
+                break;
             
             // When drawing
             case (Status.Drawing):
 
                 if (!IsDrawing()) {
                     status = Status.BlankBeforeShowStroke;
+                    deleteTubes = true;
                     strokeManager.NextStroke();
                     timeRemaining = timeBreakBetweenDrawing;
                 }
@@ -108,10 +113,11 @@ public class TaskManager : MonoBehaviour
             // After drawing
             case (Status.BlankBeforeShowStroke):
 
-                OffloadScripts(surface, drawMethod);
+                ScriptManager.shouldRun = false;
+                Debug.Log("Cannot Run");
                 if (timeRemaining < 0) {
                     status = Status.ShowStroke;
-                    DeleteTubes();
+                    if (deleteTubes) DeleteTubes();
                     strokeManager.ShowStroke();
                     timeRemaining = timeToShowStroke;
                 }
@@ -142,7 +148,7 @@ public class TaskManager : MonoBehaviour
     public void StartBlock() {
 
         startBlock.SetActive(false);
-        // LoadScripts(drawMethod);
+        LoadScripts(surface, drawMethod);
         status = Status.BlankBeforeShowStroke;
         timeRemaining = timeBreakBetweenDrawing;
 
@@ -159,7 +165,6 @@ public class TaskManager : MonoBehaviour
                               "\nBlock: " + block;
 
         startBlock.SetActive(true);
-        // OffloadScripts(drawMethod);
         status = Status.Idle;
 
         // Shuffles the stroke order
@@ -175,9 +180,12 @@ public class TaskManager : MonoBehaviour
 
         // If we have reached the end number of blocks
         if (block == numberOfBlocks) {
-            int conditionState = PlayerPrefs.GetInt("conditionState");
-            
+
+            // Offload the scripts
+            OffloadScripts(surface, drawMethod);
+
             // Increment the condition state
+            int conditionState = PlayerPrefs.GetInt("conditionState");
             conditionState++;
 
             // Set block back to zero
@@ -217,8 +225,8 @@ public class TaskManager : MonoBehaviour
                         break;
 
                     case (DrawMethod.Controller):
-                        GetComponent<ControllerDrawing>().enabled = true;
-                        activeScript = typeof(ControllerDrawing);
+                        GetComponent<ControllerDrawingV2>().enabled = true;
+                        activeScript = typeof(ControllerDrawingV2);
                         break;
                 }
                 break;
@@ -262,7 +270,7 @@ public class TaskManager : MonoBehaviour
                         break;
 
                     case (DrawMethod.Controller):
-                        GetComponent<ControllerDrawing>().enabled = false;
+                        GetComponent<ControllerDrawingV2>().enabled = false;
                         break;
                 }
                 break;
@@ -295,6 +303,7 @@ public class TaskManager : MonoBehaviour
         {
             Destroy(tube);
         }
+        deleteTubes = false;
     }
 
 }

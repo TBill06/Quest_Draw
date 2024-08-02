@@ -8,7 +8,7 @@ using Unity.ProceduralTube;
 // It uses the ProceduralTube component to draw tubes in 3D space. Ideal to use for our draw in 3d condition.
 // Don't draw with both controllers at the same time.
 // Parameters: tubeMaterial.
-public class ControllerDrawing : MonoBehaviour
+public class ControllerDrawingV2 : MonoBehaviour
 {
     public Material leftTubeMaterial;
     public Material rightTubeMaterial;
@@ -26,7 +26,9 @@ public class ControllerDrawing : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("ControllerDrawing");
+        if (!ScriptManager.shouldRun)
+            return;
+            
         OVRInput.Controller activeController = OVRInput.Controller.None;
         Material material = null;
         if (OVRInput.Get(OVRInput.RawButton.RHandTrigger))

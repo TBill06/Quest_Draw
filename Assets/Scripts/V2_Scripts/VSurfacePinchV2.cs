@@ -56,6 +56,9 @@ public class VSurfacePinchV2 : MonoBehaviour
 
     void Update()
     {
+        if (!ScriptManager.shouldRun)
+            return;
+            
         bool currentlyPinching = hand.GetIndexFingerIsPinching();
         if(currentlyPinching)
         {
