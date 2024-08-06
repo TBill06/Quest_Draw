@@ -36,8 +36,19 @@ public class Setup : MonoBehaviour
         // Get handedness
         PlayerPrefs.SetInt("left", isLeft ? 1 : 0);
 
-        // Load the next scene
-        SceneManager.LoadScene("BetweenConditions");
+        // Set the file path
+        SaveData.SetFilePath(PlayerPrefs.GetInt("pid"));
+
+        if (PlayerPrefs.GetInt("conditionState") > 8) 
+        {   
+            // Load the end scene
+            SceneManager.LoadScene("End");
+        } 
+        else
+        {
+            // Load the next scene
+            SceneManager.LoadScene("Experiment");
+        }
     }
 
 

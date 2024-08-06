@@ -36,20 +36,25 @@ public class Experiment : MonoBehaviour
             GetOrdering(i);
         }
         
-        condition = GetOrdering(id)[conditionState];
+        if (conditionState > 8)
+        {
+            SceneManager.LoadScene("End");
+        }
+        else
+        {
+            condition = GetOrdering(id)[conditionState];
         
-        PlayerPrefs.SetInt("DrawMethod", (int) condition.DrawMethod);
-        PlayerPrefs.SetInt("Surface", (int) condition.Surface);
-       
-
-        SetupInstructions(condition);
+            PlayerPrefs.SetInt("DrawMethod", (int) condition.DrawMethod);
+            PlayerPrefs.SetInt("Surface", (int) condition.Surface);
+           
+            SetupInstructions(condition);
+        }
     }
 
 
     // Start the next condition
     public void StartNextCondition() {
 
-        // Tushar: Uncomment this when ready
         switch (condition.Surface) {
             case (Surface.Physical):
 
@@ -72,10 +77,6 @@ public class Experiment : MonoBehaviour
                 SceneManager.LoadScene("NoSurfaceDraw-C1");
                 break;
         }
-
-        // Delete this when finished
-        // SceneManager.LoadScene("ExperimentTask");
-
     }
 
 

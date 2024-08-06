@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Unity.ProceduralTube
@@ -12,7 +13,7 @@ namespace Unity.ProceduralTube
         public Material material;
 
         private List<Vector3> points = new List<Vector3>();
-        private List<Vector3> logPoints = new List<Vector3>();
+        private List<PointsData> logPoints = new List<PointsData>();
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
@@ -21,16 +22,33 @@ namespace Unity.ProceduralTube
         private GameObject lastTubeKid;
         private Vector3 lastPointAdded;
 
-        private void Start()
+        public class PointsData
+        {
+            public Vector3 point;
+            public string time;
+
+            public PointsData(Vector3 point)
+            {
+                this.point = point;
+                time = DateTime.Now.ToString("HH:mm:ss");
+            }
+
+            public override string ToString()
+            {
+                return $"{{{point.x},{point.y},{point.z},{time}}}";
+            }
+        }
+
+        void Start()
         {
             CreateNewTubeKid();
         }
 
-        public List<Vector3> Points => logPoints;
+        public List<PointsData> Points => logPoints;
 
         public void AddPoint(Vector3 point)
         {
-            logPoints.Add(point);
+            logPoints.Add(new PointsData(point));
             points.Add(point);
             GenerateMesh();
         }

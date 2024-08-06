@@ -7,7 +7,8 @@ using TMPro;
 using System;
 using Unity.VisualScripting;
 using Oculus.Interaction.Input;
-
+using Unity.ProceduralTube;
+using System.Linq;
 
 public enum Status { Idle, ShowStroke, BlankBeforeDraw, Drawing, BlankBeforeShowStroke }
 
@@ -33,6 +34,7 @@ public class TaskManager : MonoBehaviour
     StrokeManager strokeManager;
     DrawMethod drawMethod;
     Surface surface;
+    int pid, block;
 
     Status status;
     float timeRemaining;
@@ -48,11 +50,16 @@ public class TaskManager : MonoBehaviour
         else
             hand = rightHand;
 
+        pid = PlayerPrefs.GetInt("pid");
         drawMethod = (DrawMethod) PlayerPrefs.GetInt("DrawMethod");
         surface = (Surface) PlayerPrefs.GetInt("Surface");
+        block = PlayerPrefs.GetInt("block");
 
         strokeManager = GetComponent<StrokeManager>();
-
+        SaveData.SetPID(pid);
+        SaveData.SetDrawMethod(drawMethod.ToString());
+        SaveData.SetSurface(surface.ToString());
+        SaveData.SetBlock(block);
         ReadyForNextBlock();
     }
 
@@ -68,6 +75,7 @@ public class TaskManager : MonoBehaviour
                 FinishBlock();
             }
         }
+        timeRemaining -= Time.deltaTime;
     }
 
 
@@ -78,6 +86,7 @@ public class TaskManager : MonoBehaviour
 
             // Show stroke
             case (Status.ShowStroke):
+                Debug.Log("1 -- Showing Stroke");
 
                 if (timeRemaining < 0) {
                     strokeManager.HideStroke();
@@ -87,22 +96,27 @@ public class TaskManager : MonoBehaviour
                 break;
 
             case (Status.BlankBeforeDraw):
+                Debug.Log("2 -- Blank Before Draw");
 
                 // Switch this based on what the condition is 
                 // (i.e. controller, pinch, or index)
                 // In the IsDrawing function
+                SaveData.SetTimeTrialStart();
                 ScriptManager.shouldRun = true;
                 if (IsDrawing()) {
                     status = Status.Drawing;
+                    SaveData.SetTimeDrawStart();
                 }
 
                 break;
             
             // When drawing
             case (Status.Drawing):
+                Debug.Log("3 -- Drawing");
 
                 if (!IsDrawing()) {
                     status = Status.BlankBeforeShowStroke;
+                    SaveData.SetTimeDrawEnd();
                     deleteTubes = true;
                     strokeManager.NextStroke();
                     timeRemaining = timeBreakBetweenDrawing;
@@ -112,9 +126,9 @@ public class TaskManager : MonoBehaviour
             
             // After drawing
             case (Status.BlankBeforeShowStroke):
+                Debug.Log("4 -- Blank Before Show Stroke");
 
                 ScriptManager.shouldRun = false;
-                Debug.Log("Cannot Run");
                 if (timeRemaining < 0) {
                     status = Status.ShowStroke;
                     if (deleteTubes) DeleteTubes();
@@ -125,8 +139,6 @@ public class TaskManager : MonoBehaviour
                 break;
 
         }
-
-        timeRemaining -= Time.deltaTime;
     }
 
     // Checks if the user is currently drawing
@@ -151,7 +163,6 @@ public class TaskManager : MonoBehaviour
         LoadScripts(surface, drawMethod);
         status = Status.BlankBeforeShowStroke;
         timeRemaining = timeBreakBetweenDrawing;
-
     }
 
     // Shows a prompt at the start of a block
@@ -169,41 +180,45 @@ public class TaskManager : MonoBehaviour
 
         // Shuffles the stroke order
         strokeManager.ResetOrder();
+        timeRemaining = timeBreakBetweenDrawing;
     }
 
     // Finish a block of drawings
     void FinishBlock() {
 
-        // Increment block number
-        int block = PlayerPrefs.GetInt("block");
-        block++;
+        if(timeRemaining < 0)
+        {
+            // Increment block number
+            int block = PlayerPrefs.GetInt("block");
+            block++;
 
-        // If we have reached the end number of blocks
-        if (block == numberOfBlocks) {
+            // If we have reached the end number of blocks
+            if (block == numberOfBlocks) {
 
-            // Offload the scripts
-            OffloadScripts(surface, drawMethod);
+                // Offload the scripts
+                OffloadScripts(surface, drawMethod);
 
-            // Increment the condition state
-            int conditionState = PlayerPrefs.GetInt("conditionState");
-            conditionState++;
+                // Increment the condition state
+                int conditionState = PlayerPrefs.GetInt("conditionState");
+                conditionState++;
+                // Set block back to zero
+                block = 0;
 
-            // Set block back to zero
-            block = 0;
+                // Set global condition state and block
+                PlayerPrefs.SetInt("conditionState", conditionState);
+                PlayerPrefs.SetInt("block", block);
 
-            // Set global condition state and block
-            PlayerPrefs.SetInt("conditionState", conditionState);
-            PlayerPrefs.SetInt("block", block);
+                SceneManager.LoadScene("BetweenConditions");
+                
+            } else {
 
-            SceneManager.LoadScene("BetweenConditions");
-            
-        } else {
+                // Otherwise, set global block
+                PlayerPrefs.SetInt("block", block);
+                SaveData.SetBlock(block);
 
-            // Otherwise, set global block
-            PlayerPrefs.SetInt("block", block);
-
-            // Shows the prompt at the start of a new block
-            ReadyForNextBlock();
+                // Shows the prompt at the start of a new block
+                ReadyForNextBlock();
+            }
         }
     }
 
@@ -297,12 +312,15 @@ public class TaskManager : MonoBehaviour
 
     void DeleteTubes()
     {
-        Debug.Log("Deleting tubes");
+        string tubePoints = "";
         GameObject[] tubes = GameObject.FindGameObjectsWithTag("Tube");
         foreach (GameObject tube in tubes)
         {
+            var points = tube.GetComponent<ProceduralTube>().Points;
+            tubePoints += string.Join(",", points.Select(p => p.ToString())) + ",";
             Destroy(tube);
         }
+        SaveData.AddStroke(tubePoints);
         deleteTubes = false;
     }
 

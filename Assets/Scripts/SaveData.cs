@@ -13,24 +13,20 @@ public class SaveData
   	public static string filepathData;
   	public static string filepathRaw;
 
-
   	public static int pid;
-
-  	//public static List<HandPoint> hps = new List<HandPoint>();
+	public static string drawMethod = "";
+	public static string surface = "";
+	public static int block;
+	public static string shape = "";
     public static List<(Vector3, long)> path = new List<(Vector3, long)>();
     public static long timeTrialStart=0;
     public static long timeDrawStart=0;
     public static long timeDrawEnd=0;
-    public static string gestureName = "G?";
-    public static string gestureSize = "";
-    public static string gestureComplexity = "";
-    public static string condition = "";
-    public static string lineArr;
 
     public static DateTime BEGIN = new DateTime(2020, 1, 1);
 
   	public static void SetFilePath(int pid) {
-  		string fp = Application.dataPath + "/LoggedData/participant_data_" + pid;
+  		string fp = Application.dataPath + "/Logs/participant_data_" + pid;
   		
   		while (File.Exists(fp+".csv")) {
   			fp = fp + "_n";
@@ -38,7 +34,7 @@ public class SaveData
 
   		filepathData = fp + ".csv";
 
-  		string fpRaw = Application.dataPath + "/LoggedData/participant_raw_" + pid;
+  		string fpRaw = Application.dataPath + "/Logs/participant_raw_" + pid;
   		
   		while (File.Exists(fpRaw+".csv")) {
   			fpRaw = fpRaw + "_n";
@@ -52,8 +48,7 @@ public class SaveData
    		try {
     		using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepathData, true)) {
 
-    			//file.WriteLine("pid;block;condition;gestureName;gestureSize;gestureComplexity;timeTrialStart;timeDrawStart;timeDrawEnd;pathData;");
-    			file.WriteLine("pid;block;condition;gestureName;timeTrialStart;timeDrawStart;timeDrawEnd;pathData;");
+    			file.WriteLine("pid;drawMethod;surface;block;timeTrialStart;timeDrawStart;timeDrawEnd;stroke;");
 
     		}
     	}
@@ -65,7 +60,7 @@ public class SaveData
     	try {
     		using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepathRaw, true)) {
 
-    			file.WriteLine("pid;block;condition;gestureName;gestureSize;gestureComplexity;handPoint");
+    			file.WriteLine("pid;drawMethod;surface;block;timeTrialStart;timeDrawStart;timeDrawEnd;stroke;");
 
     		} 
     	}
@@ -74,7 +69,27 @@ public class SaveData
     	}
    	}
 
-   	public static void SetTimeTrialStart() {
+    public static void SetPID(int ID) {
+        pid = ID;
+    }
+
+	public static void SetDrawMethod(string method) {
+		drawMethod = method;
+	}
+
+	public static void SetSurface(string surf) {
+		surface = surf;
+	}
+
+	public static void SetBlock(int b) {
+		block = b;
+	}
+
+	public static void SetShape(string s) {
+		shape = s;
+	}
+
+	public static void SetTimeTrialStart() {
    		timeTrialStart = DateTime.Now.Ticks-BEGIN.Ticks;
    	}
 
@@ -86,46 +101,12 @@ public class SaveData
    		timeDrawEnd = DateTime.Now.Ticks-BEGIN.Ticks;
    	}
 
-   	public static void SetGestureName(string name) {
-   		gestureName = name;
-   	}
-
-    public static void SetPID(int ID)
-    {
-        pid = ID;
-    }
-
-    public static void SetGestureSize(string size) {
-   		gestureSize = size;
-   	}
-
-   	public static void SetGestureComplexity(string complexity) {
-   		gestureComplexity = complexity;
-
-   	}
-
-   	public static void SetCondition(string cond) {
-   		condition = cond;
-   	}
-
-    public static void SetLine(string line)
-    {
-        lineArr = line;
-    }
-
-    public static void AddCurrentRecord() {
-        string pathData = lineArr;
-        //Debug.Log("Line Vector List : " + pathData);
-        int block = PlayerPrefs.GetInt("overallState");
-    	// hps.Clear();
-    	path.Clear();
+    public static void AddStroke(string strokeData) {
     	try {
     		using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepathData, true)) {
 
-    			//file.WriteLine(pid+";"+block+";"+condition+";"+gestureName+";"+gestureSize+";"+gestureComplexity+";"+timeTrialStart+";"+timeDrawStart+";"+timeDrawEnd+";"+pathData);
-                file.WriteLine(pid + ";" + block + ";" + condition + ";" + gestureName + ";" + timeTrialStart + ";" + timeDrawStart + ";" + timeDrawEnd + ";" + pathData);
-
-            } 
+                file.WriteLine(pid + ";" + drawMethod + ";" + surface + ";" + block + ";" + timeTrialStart + ";" + timeDrawStart + ";" + timeDrawEnd + ";" + strokeData);
+            }
     	}
     	catch (Exception ex) {
     		throw new ApplicationException("Could not save to file: ", ex);
