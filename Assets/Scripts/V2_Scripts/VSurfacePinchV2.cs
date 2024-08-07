@@ -85,7 +85,7 @@ public class VSurfacePinchV2 : MonoBehaviour
             capsule.transform.localScale = new Vector3(0.008f, length, 0.008f);
 
             Ray ray = new Ray(edgePoint, indexDirection);
-            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2))
+            if(boardObject.Raycast(ray, length*2f, out RaycastHit hit))
             {
                 if(createNewTube)
                 {

@@ -201,7 +201,7 @@ MonoBehaviour:
     IgnorePrefabSize: 0
   - Labels: 2
     Prefabs:
-    - {fileID: 8482717489713511567, guid: 6b9e934a5d3203646b98d01127242a17, type: 3}
+    - {fileID: 5244531815765188779, guid: 6b9e934a5d3203646b98d01127242a17, type: 3}
     PrefabSelection: 0
     MatchAspectRatio: 0
     CalculateFacingDirection: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
     IgnorePrefabSize: 0
   - Labels: 8192
     Prefabs:
-    - {fileID: 595634068936453454, guid: 7bde95cb984c401499abbfaa6168cad9, type: 3}
+    - {fileID: 5585472341044302537, guid: 7bde95cb984c401499abbfaa6168cad9, type: 3}
     PrefabSelection: 0
     MatchAspectRatio: 0
     CalculateFacingDirection: 0
