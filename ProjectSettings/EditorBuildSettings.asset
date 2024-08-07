@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/VirtualSurfaceDraw-C2.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/PhysicalSurfaceDraw-C3-Colliders.unity
+    path: Assets/Scenes/PhysicalSurfaceDraw-C3.unity
     guid: 7fa458907c2a0554380e6c680093be70
   - enabled: 1
     path: Assets/Scenes/End.unity
