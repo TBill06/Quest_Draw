@@ -26,7 +26,6 @@ public class VSurfacePointV2 : MonoBehaviour
     public float dcutoff = 1.0f;
 
     private OneEuroFilter<Vector2> vector2Filter;
-    private OneEuroFilter<Vector3> vector3Filter;
     private Hand hand;
     private ProceduralTube currentTube;
     private bool wasPointing = false;
@@ -36,7 +35,6 @@ public class VSurfacePointV2 : MonoBehaviour
     private Vector3 midPoint, indexDirection, edgePoint;
     private float distance, length;
     private BoxCollider boxCollider;
-    private MRUKAnchor boardObject;
 
     public bool isDrawing
     {
@@ -61,10 +59,10 @@ public class VSurfacePointV2 : MonoBehaviour
         }
 
         vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
-        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
         if(board != null)
         {
-            boxCollider = board.GetComponent<BoxCollider>();
+            Transform boardChild = board.transform.GetChild(0);
+            boxCollider = boardChild.GetComponent<BoxCollider>();
         }
     }
 
@@ -83,11 +81,8 @@ public class VSurfacePointV2 : MonoBehaviour
             Pose pose1, pose2;
             hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
             hand.GetJointPose(HandJointId.HandIndex1, out pose2);
-
-            Vector3 p1 = vector3Filter.Filter(pose1.position);
-            Vector3 p2 = vector3Filter.Filter(pose2.position);
             
-            midPoint = (p1 + p2) / 2;
+            midPoint = (pose1.position + pose2.position) / 2;
             indexDirection = (pose1.position - pose2.position).normalized;
             
             midPoint -= indexDirection * 0.04f;
@@ -101,7 +96,7 @@ public class VSurfacePointV2 : MonoBehaviour
             capsule.transform.localScale = new Vector3(0.008f, length, 0.008f);
 
             Ray ray = new Ray(edgePoint, indexDirection);
-            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2))
+            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2f))
             {
                 if(createNewTube)
                 {
@@ -128,9 +123,9 @@ public class VSurfacePointV2 : MonoBehaviour
     void UpdateLine(Vector3 point, Vector3 normal)
     {
         Vector3 offsetPoint = point + normal * 0.01f;
-        // Vector2 point2D = new Vector2(offsetPoint.x, offsetPoint.y);
-        // Vector2 filterPoint = vector2Filter.Filter(point2D);
-        // Vector3 finalPoint = new Vector3(filterPoint.x, filterPoint.y, offsetPoint.z);
+        Vector2 point2D = new Vector2(offsetPoint.x, offsetPoint.y);
+        Vector2 filterPoint = vector2Filter.Filter(point2D);
+        Vector3 finalPoint = new Vector3(filterPoint.x, filterPoint.y, offsetPoint.z);
         currentTube.AddPoint(offsetPoint);
     }
 
@@ -139,24 +134,4 @@ public class VSurfacePointV2 : MonoBehaviour
     {
         indexPointerPoseDetected = detected;
     }
-    
-    public void OnSceneInitialized()
-    {
-        MRUKRoom room = MRUK.Instance.GetCurrentRoom();
-        if (room != null)
-        {
-            List<MRUKAnchor> anchors = room.Anchors;
-            foreach (MRUKAnchor anchor in anchors)
-            {
-                if (anchor.Label.ToString() == "WALL_ART")
-                {
-                    boardObject = anchor;
-                    Transform wallChild = boardObject.transform.GetChild(0);
-                    Transform wallGrandChild = wallChild.GetChild(0);
-                    boxCollider = wallGrandChild.GetComponent<BoxCollider>();
-                }
-            }
-        }
-    }
-
 }

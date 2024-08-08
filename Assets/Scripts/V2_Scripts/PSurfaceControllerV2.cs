@@ -5,16 +5,15 @@ using Oculus.Interaction.Input;
 using Unity.ProceduralTube;
 using Meta.XR.MRUtilityKit;
 
-// This script draws on a virtual board when user holds the controller like a pen and presses the hand trigger.
-// It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in virtual surface condition.
+// This script draws on a physcial board when user holds the controller like a pen and presses the hand trigger.
+// It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in physcial surface condition.
 // Don't draw with both controllers at the same time.
-// It uses the virtual board's collider and do raycasting to draw on the board.
+// It uses the physcial board's MRUKAnchor and do raycasting to draw on the board.
 // Parameters: tubeMaterial.
-public class VSurfaceControllerV2 : MonoBehaviour
+public class PSurfaceControllerV2 : MonoBehaviour
 {
     public Material leftTubeMaterial;
     public Material rightTubeMaterial;
-    public GameObject board;
     public GameObject capsule;
     private ProceduralTube currentTube;
     private bool _isDrawing = false;
@@ -22,21 +21,12 @@ public class VSurfaceControllerV2 : MonoBehaviour
     private Vector3 rotationCheck, midPoint, downDirection, controllerTipPosition, edgePoint;
     private float distance, length;
     private Vector3 lastDrawPoint;
-    private BoxCollider boxCollider;
+    private MRUKAnchor boardObject;
 
     public bool isDrawing
     {
         get { return _isDrawing; }
         set { _isDrawing = value; }
-    }
-
-    void Start()
-    {
-        if(board != null)
-        {
-            Transform boardChild = board.transform.GetChild(0);
-            boxCollider = boardChild.GetComponent<BoxCollider>();
-        }
     }
 
     void Update()
@@ -84,7 +74,7 @@ public class VSurfaceControllerV2 : MonoBehaviour
             capsule.transform.localScale = new Vector3(0.008f, length, 0.008f);
 
             Ray ray = new Ray(edgePoint, downDirection);
-            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2f))
+            if(boardObject.Raycast(ray, length*2f, out RaycastHit hit))
             {
                 if (!isDrawing)
                 {
@@ -114,7 +104,7 @@ public class VSurfaceControllerV2 : MonoBehaviour
     // Updates the line by adding points to the tube
     void UpdateLine(Vector3 point, Vector3 normal)
     {
-        Vector3 drawPoint = point + normal * 0.01f;  
+        Vector3 drawPoint = point + normal * 0.02f;  
         if (!isFirstPoint)
         {
             drawPoint = Vector3.Lerp(lastDrawPoint, drawPoint, 0.5f);
@@ -132,5 +122,22 @@ public class VSurfaceControllerV2 : MonoBehaviour
     void StopDrawing()
     {
         isDrawing = false;
+    }
+
+    public void OnSceneInitialized()
+    {
+        MRUKRoom room = MRUK.Instance.GetCurrentRoom();
+        if (room != null)
+        {
+            List<MRUKAnchor> anchors = room.Anchors;
+            foreach (MRUKAnchor anchor in anchors)
+            {
+                if (anchor.Label.ToString() == "WALL_ART")
+                {
+                    boardObject = anchor;
+                    break;
+                }
+            }
+        }
     }
 }

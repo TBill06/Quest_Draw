@@ -5,17 +5,16 @@ using Oculus.Interaction.Input;
 using Unity.ProceduralTube;
 using Meta.XR.MRUtilityKit;
 
-// This script draws on a virtual board when user pinches with their index and thumb fingers.
-// It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in virtual surface condition.
+// This script draws on a physical board when user pinches with their index and thumb fingers.
+// It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in physical surface condition.
 // It uses the OneEuroFilter to filter the hand position data.
-// It uses the virtual board's collider and do raycasting to draw on the board.
+// It uses the physical board's MRUKAnchor and do raycasting to draw on the board.
 // Parameters: Hand, tubeMaterial.
-public class VSurfacePinchV2 : MonoBehaviour
+public class PSurfacePinchV2 : MonoBehaviour
 {
     public Hand leftHand;
     public Hand rightHand;
     public Material tubeMaterial; 
-    public GameObject board;
     public GameObject capsule;
     public float filterFrequency = 90.0f;
     public float minCutoff = 1.0f;
@@ -30,7 +29,7 @@ public class VSurfacePinchV2 : MonoBehaviour
     private bool _isDrawing = false;
     private Vector3 midPoint, indexDirection, edgePoint;
     private float distance, length;
-    private BoxCollider boxCollider;
+    private MRUKAnchor boardObject;
 
     public bool isDrawing
     {
@@ -47,11 +46,6 @@ public class VSurfacePinchV2 : MonoBehaviour
             hand = rightHand;
             
         vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
-        if(board != null)
-        {
-            Transform boardChild = board.transform.GetChild(0);
-            boxCollider = boardChild.GetComponent<BoxCollider>();
-        }
     }
 
     void Update()
@@ -85,7 +79,7 @@ public class VSurfacePinchV2 : MonoBehaviour
             capsule.transform.localScale = new Vector3(0.008f, length, 0.008f);
 
             Ray ray = new Ray(edgePoint, indexDirection);
-            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2f))
+            if(boardObject.Raycast(ray, length*2f, out RaycastHit hit))
             {
                 if(createNewTube)
                 {
@@ -111,10 +105,28 @@ public class VSurfacePinchV2 : MonoBehaviour
 
     void UpdateLine(Vector3 point, Vector3 normal)
     {
-        Vector3 offsetPoint = point + normal * 0.01f;
+        Vector3 offsetPoint = point + normal * 0.02f;
         Vector2 point2D = new Vector2(offsetPoint.x, offsetPoint.y);
         Vector2 filterPoint = vector2Filter.Filter(point2D);
         Vector3 finalPoint = new Vector3(filterPoint.x, filterPoint.y, offsetPoint.z);
         currentTube.AddPoint(finalPoint);
     }
+    
+    public void OnSceneInitialized()
+    {
+        MRUKRoom room = MRUK.Instance.GetCurrentRoom();
+        if (room != null)
+        {
+            List<MRUKAnchor> anchors = room.Anchors;
+            foreach (MRUKAnchor anchor in anchors)
+            {
+                if (anchor.Label.ToString() == "WALL_ART")
+                {
+                    boardObject = anchor;
+                    break;
+                }
+            }
+        }
+    }
+
 }

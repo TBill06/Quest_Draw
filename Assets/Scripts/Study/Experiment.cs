@@ -60,7 +60,7 @@ public class Experiment : MonoBehaviour
 
                 Debug.Log("Physical Surface");
                 // Load the next condition scene: Physical Surface Draw
-                SceneManager.LoadScene("VirtualSurfaceDraw-C2");
+                SceneManager.LoadScene("PhysicalSurfaceDraw-C3");
                 break;
             
             case (Surface.Virtual):

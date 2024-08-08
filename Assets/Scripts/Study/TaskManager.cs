@@ -56,10 +56,10 @@ public class TaskManager : MonoBehaviour
         block = PlayerPrefs.GetInt("block");
 
         strokeManager = GetComponent<StrokeManager>();
-        SaveData.SetPID(pid);
-        SaveData.SetDrawMethod(drawMethod.ToString());
-        SaveData.SetSurface(surface.ToString());
-        SaveData.SetBlock(block);
+        // SaveData.SetPID(pid);
+        // SaveData.SetDrawMethod(drawMethod.ToString());
+        // SaveData.SetSurface(surface.ToString());
+        // SaveData.SetBlock(block);
         ReadyForNextBlock();
     }
 
@@ -101,11 +101,11 @@ public class TaskManager : MonoBehaviour
                 // Switch this based on what the condition is 
                 // (i.e. controller, pinch, or index)
                 // In the IsDrawing function
-                SaveData.SetTimeTrialStart();
+               // SaveData.SetTimeTrialStart();
                 ScriptManager.shouldRun = true;
                 if (IsDrawing()) {
                     status = Status.Drawing;
-                    SaveData.SetTimeDrawStart();
+                   // SaveData.SetTimeDrawStart();
                 }
 
                 break;
@@ -116,7 +116,7 @@ public class TaskManager : MonoBehaviour
 
                 if (!IsDrawing()) {
                     status = Status.BlankBeforeShowStroke;
-                    SaveData.SetTimeDrawEnd();
+                   // SaveData.SetTimeDrawEnd();
                     deleteTubes = true;
                     strokeManager.NextStroke();
                     timeRemaining = timeBreakBetweenDrawing;
@@ -214,7 +214,7 @@ public class TaskManager : MonoBehaviour
 
                 // Otherwise, set global block
                 PlayerPrefs.SetInt("block", block);
-                SaveData.SetBlock(block);
+               // SaveData.SetBlock(block);
 
                 // Shows the prompt at the start of a new block
                 ReadyForNextBlock();
@@ -247,7 +247,6 @@ public class TaskManager : MonoBehaviour
                 break;
             
             case (Surface.Virtual):
-            case (Surface.Physical):
                 switch (drawMethod)
                 {
                     case (DrawMethod.Pinch):
@@ -263,6 +262,26 @@ public class TaskManager : MonoBehaviour
                     case (DrawMethod.Controller):
                         GetComponent<VSurfaceControllerV2>().enabled = true;
                         activeScript = typeof(VSurfaceControllerV2);
+                        break;
+                }
+                break;
+
+            case (Surface.Physical):
+                switch (drawMethod)
+                {
+                    case (DrawMethod.Pinch):
+                        GetComponent<PSurfacePinchV2>().enabled = true;
+                        activeScript = typeof(PSurfacePinchV2);
+                        break;
+
+                    case (DrawMethod.Index):
+                        GetComponent<PSurfacePointV2>().enabled = true;
+                        activeScript = typeof(PSurfacePointV2);
+                        break;
+
+                    case (DrawMethod.Controller):
+                        GetComponent<PSurfaceControllerV2>().enabled = true;
+                        activeScript = typeof(PSurfaceControllerV2);
                         break;
                 }
                 break;
@@ -291,7 +310,6 @@ public class TaskManager : MonoBehaviour
                 break;
             
             case (Surface.Virtual):
-            case (Surface.Physical):
                 switch (drawMethod)
                 {
                     case (DrawMethod.Pinch):
@@ -304,6 +322,23 @@ public class TaskManager : MonoBehaviour
 
                     case (DrawMethod.Controller):
                         GetComponent<VSurfaceControllerV2>().enabled = false;
+                        break;
+                }
+                break;
+            
+            case (Surface.Physical):
+                switch (drawMethod)
+                {
+                    case (DrawMethod.Pinch):
+                        GetComponent<PSurfacePinchV2>().enabled = false;
+                        break;
+
+                    case (DrawMethod.Index):
+                        GetComponent<PSurfacePointV2>().enabled = false;
+                        break;
+
+                    case (DrawMethod.Controller):
+                        GetComponent<PSurfaceControllerV2>().enabled = false;
                         break;
                 }
                 break;
@@ -320,7 +355,7 @@ public class TaskManager : MonoBehaviour
             tubePoints += string.Join(",", points.Select(p => p.ToString())) + ",";
             Destroy(tube);
         }
-        SaveData.AddStroke(tubePoints);
+        // SaveData.AddStroke(tubePoints);
         deleteTubes = false;
     }
 
