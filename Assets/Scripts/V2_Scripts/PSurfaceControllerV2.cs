@@ -16,23 +16,37 @@ public class PSurfaceControllerV2 : MonoBehaviour
     public Material rightTubeMaterial;
     public GameObject capsule;
     private ProceduralTube currentTube;
-    private bool _isDrawing = false;
+    private bool isDrawing = false;
+    private bool _startedDrawing = false;
+    private bool _finishedDrawing = false;
+    private int frames = 0;
     private bool isFirstPoint = true;
     private Vector3 rotationCheck, midPoint, downDirection, controllerTipPosition, edgePoint;
     private float distance, length;
     private Vector3 lastDrawPoint;
     private MRUKAnchor boardObject;
 
-    public bool isDrawing
+    public bool startedDrawing
     {
-        get { return _isDrawing; }
-        set { _isDrawing = value; }
+        get { return _startedDrawing; }
+        set { _startedDrawing = value; }
+    }
+
+    public bool finishedDrawing
+    {
+        get { return _finishedDrawing; }
+        set { _finishedDrawing = value; }
     }
 
     void Update()
     {
         if (!ScriptManager.shouldRun)
+        {
+            startedDrawing = false;
+            finishedDrawing = false;
+            frames = 0;
             return;
+        }
             
         OVRInput.Controller activeController = OVRInput.Controller.None;
         Material material = null;
@@ -48,6 +62,7 @@ public class PSurfaceControllerV2 : MonoBehaviour
         }
         if (activeController != OVRInput.Controller.None)
         {
+            frames = 0;
             Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(activeController);
             Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(activeController);
 
@@ -79,12 +94,21 @@ public class PSurfaceControllerV2 : MonoBehaviour
                 if (!isDrawing)
                 {
                     StartDrawing(material);
+                    startedDrawing = true;
                 }
                 UpdateLine(hit.point, hit.normal);
             }
             else
             {
                 StopDrawing();
+            }
+        }
+        else
+        {
+            if (startedDrawing)
+            {
+                frames++;
+                if (frames > 100) { finishedDrawing = true; }
             }
         }
     }

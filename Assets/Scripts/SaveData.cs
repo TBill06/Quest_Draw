@@ -17,7 +17,7 @@ public class SaveData
 	public static string drawMethod = "";
 	public static string surface = "";
 	public static int block;
-	public static string shape = "";
+	public static Tuple<int, Complexity> shape = new Tuple<int, Complexity>(0, Complexity.DEFAULT);
     public static List<(Vector3, long)> path = new List<(Vector3, long)>();
     public static long timeTrialStart=0;
     public static long timeDrawStart=0;
@@ -48,7 +48,7 @@ public class SaveData
    		try {
     		using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepathData, true)) {
 
-    			file.WriteLine("pid;drawMethod;surface;block;timeTrialStart;timeDrawStart;timeDrawEnd;stroke;");
+    			file.WriteLine("pid;drawMethod;surface;block;shape;timeTrialStart;timeDrawStart;timeDrawEnd;stroke;");
 
     		}
     	}
@@ -60,7 +60,7 @@ public class SaveData
     	try {
     		using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepathRaw, true)) {
 
-    			file.WriteLine("pid;drawMethod;surface;block;timeTrialStart;timeDrawStart;timeDrawEnd;stroke;");
+    			file.WriteLine("pid;drawMethod;surface;block;shape;timeTrialStart;timeDrawStart;timeDrawEnd;stroke;");
 
     		} 
     	}
@@ -85,7 +85,7 @@ public class SaveData
 		block = b;
 	}
 
-	public static void SetShape(string s) {
+	public static void SetShape(Tuple<int, Complexity> s) {
 		shape = s;
 	}
 
@@ -105,7 +105,7 @@ public class SaveData
     	try {
     		using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filepathData, true)) {
 
-                file.WriteLine(pid + ";" + drawMethod + ";" + surface + ";" + block + ";" + timeTrialStart + ";" + timeDrawStart + ";" + timeDrawEnd + ";" + strokeData);
+                file.WriteLine(pid + ";" + drawMethod + ";" + surface + ";" + block + ";" + shape + ";" + timeTrialStart + ";" + timeDrawStart + ";" + timeDrawEnd + ";" + strokeData + ";");
             }
     	}
     	catch (Exception ex) {

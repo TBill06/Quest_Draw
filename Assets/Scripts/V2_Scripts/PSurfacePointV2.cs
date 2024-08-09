@@ -25,21 +25,28 @@ public class PSurfacePointV2 : MonoBehaviour
     public float dcutoff = 1.0f;
 
     private OneEuroFilter<Vector2> vector2Filter;
-    private OneEuroFilter<Vector3> vector3Filter;
     private Hand hand;
     private ProceduralTube currentTube;
     private bool wasPointing = false;
     private bool createNewTube = false;
     private bool indexPointerPoseDetected = false;
-    private bool _isDrawing = false;
+    private bool _startedDrawing = false;
+    private bool _finishedDrawing = false;
+    private int frames = 0;
     private Vector3 midPoint, indexDirection, edgePoint;
     private float distance, length;
     private MRUKAnchor boardObject;
 
-    public bool isDrawing
+    public bool startedDrawing
     {
-        get { return _isDrawing; }
-        set { _isDrawing = value; }
+        get { return _startedDrawing; }
+        set { _startedDrawing = value; }
+    }
+
+    public bool finishedDrawing
+    {
+        get { return _finishedDrawing; }
+        set { _finishedDrawing = value; }
     }
 
     void Start()
@@ -64,10 +71,16 @@ public class PSurfacePointV2 : MonoBehaviour
     void Update()
     {
         if (!ScriptManager.shouldRun)
+        {
+            startedDrawing = false;
+            finishedDrawing = false;
+            frames = 0;
             return;
+        }
             
         if(indexPointerPoseDetected)
         {
+            frames = 0;
             if(!wasPointing)
             {
                 createNewTube = true;
@@ -95,7 +108,7 @@ public class PSurfacePointV2 : MonoBehaviour
             {
                 if(createNewTube)
                 {
-                    isDrawing = true;
+                    startedDrawing = true;
                     GameObject tubeObject = new GameObject("Tube");
                     tubeObject.tag = "Tube";
                     vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
@@ -103,13 +116,19 @@ public class PSurfacePointV2 : MonoBehaviour
                     currentTube.material = tubeMaterial;
                     createNewTube = false;
                 }
-                UpdateLine(hit.point, hit.normal);    
-                
+                UpdateLine(hit.point, hit.normal);     
             }
             else
             {
-                isDrawing = false;
                 createNewTube = true;
+            }
+        }
+        else
+        {
+            if (startedDrawing)
+            {
+                frames++;
+                if (frames > 200) { finishedDrawing = true; }
             }
         }
         wasPointing = indexPointerPoseDetected;

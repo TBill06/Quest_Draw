@@ -705,6 +705,50 @@ PrefabInstance:
       propertyPath: _interactableView
       value: 
       objectReference: {fileID: 375056249}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _hoverColorState.Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _hoverColorState.Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _hoverColorState.Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _normalColorState.Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _normalColorState.Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _normalColorState.Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _normalColorState.Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _selectColorState.Color.a
+      value: 0.19607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _selectColorState.Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _selectColorState.Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _selectColorState.Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1525809449593376791, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: m_LocalScale.x
       value: 2

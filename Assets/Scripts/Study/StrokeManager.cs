@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.ProceduralTube;
-
+using System;
 
 
 public class StrokeManager : MonoBehaviour
@@ -34,6 +34,10 @@ public class StrokeManager : MonoBehaviour
         strokes[order[position]].gameObject.SetActive(false);
     }
 
+    public Tuple<int, Complexity> GetStrokeInfo() {
+        return new Tuple<int, Complexity>(strokes[order[position]].GetNum(), strokes[order[position]].GetComplexity());
+    }
+
     public void ResetOrder() {
 
         for (int i = order.Length - 1; i > 0; i--)
@@ -45,7 +49,4 @@ public class StrokeManager : MonoBehaviour
         }
         position = 0;
     }
-
-
-
 }

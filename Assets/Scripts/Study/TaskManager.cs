@@ -39,7 +39,7 @@ public class TaskManager : MonoBehaviour
     Status status;
     float timeRemaining;
     private Type activeScript;
-    private bool deleteTubes = true;
+    private bool deleteTubes = false;
 
     // Start sets the hand, draw method, surface, and stroke manager
     void Start() {
@@ -96,14 +96,15 @@ public class TaskManager : MonoBehaviour
                 break;
 
             case (Status.BlankBeforeDraw):
-                Debug.Log("2 -- Blank Before Draw");
+                Debug.Log("BlankBeforeDraw Property Check startedDrawing: " + propertyCheck("startedDrawing"));
+                Debug.Log("BlankBeforeDraw Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
 
                 // Switch this based on what the condition is 
                 // (i.e. controller, pinch, or index)
                 // In the IsDrawing function
                // SaveData.SetTimeTrialStart();
                 ScriptManager.shouldRun = true;
-                if (IsDrawing()) {
+                if (propertyCheck("startedDrawing")) {
                     status = Status.Drawing;
                    // SaveData.SetTimeDrawStart();
                 }
@@ -112,9 +113,10 @@ public class TaskManager : MonoBehaviour
             
             // When drawing
             case (Status.Drawing):
-                Debug.Log("3 -- Drawing");
+                Debug.Log("Drawing Property Check startedDrawing: " + propertyCheck("startedDrawing"));
+                Debug.Log("Drawing Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
 
-                if (!IsDrawing()) {
+                if (propertyCheck("finishedDrawing")) {
                     status = Status.BlankBeforeShowStroke;
                    // SaveData.SetTimeDrawEnd();
                     deleteTubes = true;
@@ -133,6 +135,7 @@ public class TaskManager : MonoBehaviour
                     status = Status.ShowStroke;
                     if (deleteTubes) DeleteTubes();
                     strokeManager.ShowStroke();
+                    // SaveData.SetShape(strokeManager.GetStrokeInfo());
                     timeRemaining = timeToShowStroke;
                 }
             
@@ -142,18 +145,17 @@ public class TaskManager : MonoBehaviour
     }
 
     // Checks if the user is currently drawing
-    bool IsDrawing() {
+    bool propertyCheck(string propertyName) {
 
-        bool isDrawing = false;
+        bool result = false;
 
         if (activeScript != null)
         {
-            var isDrawingProperty = activeScript.GetProperty("isDrawing");
+            var property = activeScript.GetProperty(propertyName);
             var component = GetComponent(activeScript);
-            isDrawing = (bool)isDrawingProperty.GetValue(component);
+            result = (bool)property.GetValue(component);
         }
-
-        return isDrawing;
+        return result;
     }
 
     // Actually starts the block
@@ -188,6 +190,9 @@ public class TaskManager : MonoBehaviour
 
         if(timeRemaining < 0)
         {
+            // Stop unnecessary script calls at the end of block
+            ScriptManager.shouldRun = false;
+
             // Increment block number
             int block = PlayerPrefs.GetInt("block");
             block++;
@@ -352,8 +357,8 @@ public class TaskManager : MonoBehaviour
         foreach (GameObject tube in tubes)
         {
             var points = tube.GetComponent<ProceduralTube>().Points;
-            tubePoints += string.Join(",", points.Select(p => p.ToString())) + ",";
-            Destroy(tube);
+            tubePoints += string.Join(",", points.Select(p => p.ToString()));
+            // Destroy(tube);
         }
         // SaveData.AddStroke(tubePoints);
         deleteTubes = false;

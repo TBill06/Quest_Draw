@@ -1472,15 +1472,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0023391815
+      value: 0.002020202
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.0023391815
+      value: 0.002020202
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.0023391815
+      value: 0.002020202
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2539,10 +2539,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 765641985}
     - target: {fileID: 871841034245028755, guid: 19bb7bce01441774f83f5221299e7f33, type: 3}
-      propertyPath: m_ScaleFactor
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 871841034245028755, guid: 19bb7bce01441774f83f5221299e7f33, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
@@ -2568,11 +2564,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2360863774885267096, guid: 19bb7bce01441774f83f5221299e7f33, type: 3}
       propertyPath: m_PlaneDistance
-      value: 0.6
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2360863774885267096, guid: 19bb7bce01441774f83f5221299e7f33, type: 3}
       propertyPath: m_UpdateRectTransformForStandalone
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2619498838908819788, guid: 19bb7bce01441774f83f5221299e7f33, type: 3}
       propertyPath: m_Name

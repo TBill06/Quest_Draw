@@ -31,15 +31,23 @@ public class VSurfacePointV2 : MonoBehaviour
     private bool wasPointing = false;
     private bool createNewTube = false;
     private bool indexPointerPoseDetected = false;
-    private bool _isDrawing = false;
+    private int frames = 0;
+    private bool _startedDrawing = false;
+    private bool _finishedDrawing = false;
     private Vector3 midPoint, indexDirection, edgePoint;
     private float distance, length;
     private BoxCollider boxCollider;
 
-    public bool isDrawing
+    public bool startedDrawing
     {
-        get { return _isDrawing; }
-        set { _isDrawing = value; }
+        get { return _startedDrawing; }
+        set { _startedDrawing = value; }
+    }
+
+    public bool finishedDrawing
+    {
+        get { return _finishedDrawing; }
+        set { _finishedDrawing = value; }
     }
 
     void Start()
@@ -69,10 +77,16 @@ public class VSurfacePointV2 : MonoBehaviour
     void Update()
     {
         if (!ScriptManager.shouldRun)
+        {
+            startedDrawing = false;
+            finishedDrawing = false;
+            frames = 0;
             return;
+        }
             
         if(indexPointerPoseDetected)
         {
+            frames = 0;
             if(!wasPointing)
             {
                 createNewTube = true;
@@ -100,7 +114,7 @@ public class VSurfacePointV2 : MonoBehaviour
             {
                 if(createNewTube)
                 {
-                    isDrawing = true;
+                    startedDrawing = true;
                     GameObject tubeObject = new GameObject("Tube");
                     tubeObject.tag = "Tube";
                     vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
@@ -109,12 +123,18 @@ public class VSurfacePointV2 : MonoBehaviour
                     createNewTube = false;
                 }
                 UpdateLine(hit.point, hit.normal);    
-                
             }
             else
             {
-                isDrawing = false;
                 createNewTube = true;
+            }
+        }
+        else
+        {
+            if (startedDrawing)
+            {
+                frames++;
+                if (frames > 200) { finishedDrawing = true; }
             }
         }
         wasPointing = indexPointerPoseDetected;
@@ -126,7 +146,7 @@ public class VSurfacePointV2 : MonoBehaviour
         Vector2 point2D = new Vector2(offsetPoint.x, offsetPoint.y);
         Vector2 filterPoint = vector2Filter.Filter(point2D);
         Vector3 finalPoint = new Vector3(filterPoint.x, filterPoint.y, offsetPoint.z);
-        currentTube.AddPoint(offsetPoint);
+        currentTube.AddPoint(finalPoint);
     }
 
     // Public method to set the index finger pose detected

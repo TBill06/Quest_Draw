@@ -24,13 +24,22 @@ public class PointDrawingV2 : MonoBehaviour
     private OneEuroFilter<Vector3> vector3Filter;
     private Hand hand;
     private bool indexPointerPoseDetected = false;
-    private bool _isDrawing = false;
+    private bool isDrawing = false;
+    private bool _startedDrawing = false;
+    private bool _finishedDrawing = false;
+    private int frames = 0;
     private ProceduralTube currentTube;
 
-    public bool isDrawing
+    public bool startedDrawing
     {
-        get { return _isDrawing; }
-        set { _isDrawing = value; }
+        get { return _startedDrawing; }
+        set { _startedDrawing = value; }
+    }
+
+    public bool finishedDrawing
+    {
+        get { return _finishedDrawing; }
+        set { _finishedDrawing = value; }
     }
 
     void Start()
@@ -53,18 +62,30 @@ public class PointDrawingV2 : MonoBehaviour
     void Update()
     {
         if (!ScriptManager.shouldRun)
+        {
+            startedDrawing = false;
+            finishedDrawing = false;
+            frames = 0;
             return;
+        }
             
         if (indexPointerPoseDetected)
         {
+            frames = 0;
             if (!isDrawing)
             {
                 StartDrawing();
+                startedDrawing = true;
             }
             UpdateLine();
         }
         else
         {
+            if (startedDrawing)
+            {
+                frames++;
+                if (frames > 10) { finishedDrawing = true; }
+            }
             StopDrawing();
         }
     }

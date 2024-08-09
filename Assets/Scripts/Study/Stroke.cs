@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Complexity { SIMPLE,  MEDIUM, COMPLEX }
+public enum Complexity { DEFAULT ,SIMPLE,  MEDIUM, COMPLEX }
 
 
 public class Stroke : MonoBehaviour
