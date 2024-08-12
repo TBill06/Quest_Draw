@@ -15,16 +15,12 @@ public class MenuPosition : MonoBehaviour
             {
                 if (anchor.Label.ToString() == "WALL_ART")
                 {
-                    Transform wallChild = anchor.transform.GetChild(0);
-                    var scale = wallChild.localScale;
                     var position = anchor.transform.position;
                     var rotation = anchor.transform.rotation;
 
                     // Set transform of the menu
-                    transform.position = new Vector3(position.x-1.3f, position.y, position.z+0.15f);
+                    transform.position = new Vector3(position.x-2f, position.y, position.z+0.2f);
                     transform.rotation *= rotation;
-                    Transform transformChild = transform.GetChild(0);
-                    transformChild.localScale = scale;
                 }
             }
         }

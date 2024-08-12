@@ -56,10 +56,10 @@ public class TaskManager : MonoBehaviour
         block = PlayerPrefs.GetInt("block");
 
         strokeManager = GetComponent<StrokeManager>();
-        // SaveData.SetPID(pid);
-        // SaveData.SetDrawMethod(drawMethod.ToString());
-        // SaveData.SetSurface(surface.ToString());
-        // SaveData.SetBlock(block);
+        SaveData.SetPID(pid);
+        SaveData.SetDrawMethod(drawMethod.ToString());
+        SaveData.SetSurface(surface.ToString());
+        SaveData.SetBlock(block);
         ReadyForNextBlock();
     }
 
@@ -86,7 +86,7 @@ public class TaskManager : MonoBehaviour
 
             // Show stroke
             case (Status.ShowStroke):
-                Debug.Log("1 -- Showing Stroke");
+                // Debug.Log("1 -- Showing Stroke");
 
                 if (timeRemaining < 0) {
                     strokeManager.HideStroke();
@@ -96,29 +96,29 @@ public class TaskManager : MonoBehaviour
                 break;
 
             case (Status.BlankBeforeDraw):
-                Debug.Log("BlankBeforeDraw Property Check startedDrawing: " + propertyCheck("startedDrawing"));
-                Debug.Log("BlankBeforeDraw Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
+                // Debug.Log("BlankBeforeDraw Property Check startedDrawing: " + propertyCheck("startedDrawing"));
+                // Debug.Log("BlankBeforeDraw Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
 
                 // Switch this based on what the condition is 
                 // (i.e. controller, pinch, or index)
                 // In the IsDrawing function
-               // SaveData.SetTimeTrialStart();
+               SaveData.SetTimeTrialStart();
                 ScriptManager.shouldRun = true;
                 if (propertyCheck("startedDrawing")) {
                     status = Status.Drawing;
-                   // SaveData.SetTimeDrawStart();
+                   SaveData.SetTimeDrawStart();
                 }
 
                 break;
             
             // When drawing
             case (Status.Drawing):
-                Debug.Log("Drawing Property Check startedDrawing: " + propertyCheck("startedDrawing"));
-                Debug.Log("Drawing Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
+                // Debug.Log("Drawing Property Check startedDrawing: " + propertyCheck("startedDrawing"));
+                // Debug.Log("Drawing Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
 
                 if (propertyCheck("finishedDrawing")) {
                     status = Status.BlankBeforeShowStroke;
-                   // SaveData.SetTimeDrawEnd();
+                    SaveData.SetTimeDrawEnd();
                     deleteTubes = true;
                     strokeManager.NextStroke();
                     timeRemaining = timeBreakBetweenDrawing;
@@ -128,14 +128,14 @@ public class TaskManager : MonoBehaviour
             
             // After drawing
             case (Status.BlankBeforeShowStroke):
-                Debug.Log("4 -- Blank Before Show Stroke");
+                // Debug.Log("4 -- Blank Before Show Stroke");
 
                 ScriptManager.shouldRun = false;
                 if (timeRemaining < 0) {
                     status = Status.ShowStroke;
                     if (deleteTubes) DeleteTubes();
                     strokeManager.ShowStroke();
-                    // SaveData.SetShape(strokeManager.GetStrokeInfo());
+                    SaveData.SetShape(strokeManager.GetStrokeInfo());
                     timeRemaining = timeToShowStroke;
                 }
             
@@ -219,7 +219,7 @@ public class TaskManager : MonoBehaviour
 
                 // Otherwise, set global block
                 PlayerPrefs.SetInt("block", block);
-               // SaveData.SetBlock(block);
+                SaveData.SetBlock(block);
 
                 // Shows the prompt at the start of a new block
                 ReadyForNextBlock();
@@ -358,9 +358,9 @@ public class TaskManager : MonoBehaviour
         {
             var points = tube.GetComponent<ProceduralTube>().Points;
             tubePoints += string.Join(",", points.Select(p => p.ToString()));
-            // Destroy(tube);
+            Destroy(tube);
         }
-        // SaveData.AddStroke(tubePoints);
+        SaveData.AddStroke(tubePoints);
         deleteTubes = false;
     }
 

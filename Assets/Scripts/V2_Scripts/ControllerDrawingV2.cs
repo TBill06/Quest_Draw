@@ -10,10 +10,9 @@ using Unity.ProceduralTube;
 // Parameters: tubeMaterial.
 public class ControllerDrawingV2 : MonoBehaviour
 {
-    public Material leftTubeMaterial;
-    public Material rightTubeMaterial;
+    public Material tubeMaterial;
     private Vector3 rotationCheck;
-    private bool isDrawing = false;
+    private bool createNewTube = true;
     private bool _finishedDrawing = false;
     private bool _startedDrawing = false;
     private int frames = 0;
@@ -35,33 +34,42 @@ public class ControllerDrawingV2 : MonoBehaviour
 
     void Update()
     {
+        // Check if the script should run and reset the variables
         if (!ScriptManager.shouldRun)
         {
             startedDrawing = false;
             finishedDrawing = false;
+            createNewTube = true;
             frames = 0;
             return;
         }
-            
+        
+        // Set the active controller
         OVRInput.Controller activeController = OVRInput.Controller.None;
-        Material material = null;
         if (OVRInput.Get(OVRInput.RawButton.RHandTrigger))
         {
             activeController = OVRInput.Controller.RTouch;
-            material = rightTubeMaterial;
         }
         else if (OVRInput.Get(OVRInput.RawButton.LHandTrigger))
         {
             activeController = OVRInput.Controller.LTouch;
-            material = leftTubeMaterial;
         }
+
+        // Check if the controller is active
         if (activeController != OVRInput.Controller.None)
         {
             frames = 0;
-            if (!isDrawing)
+            if (createNewTube)
             {
-                StartDrawing(material);
+                createNewTube = false;
                 startedDrawing = true;
+                isFirstPoint = true;
+
+                GameObject tubeObject = new GameObject("Tube");
+                tubeObject.tag = "Tube";
+                currentTube = tubeObject.AddComponent<ProceduralTube>();
+                currentTube.material = tubeMaterial;
+                
             }
             UpdateLine(activeController);
         }
@@ -70,61 +78,41 @@ public class ControllerDrawingV2 : MonoBehaviour
             if (startedDrawing)
             {
                 frames++;
-                if (frames > 200) { finishedDrawing = true; }
+                if (frames > 20) { finishedDrawing = true; }
             }
-            StopDrawing();
         }
-    }
-
-    // Initializes a new tube object
-    void StartDrawing(Material material)
-    {
-        isDrawing = true;
-        isFirstPoint = true;
-
-        GameObject tubeObject = new GameObject("Tube");
-        tubeObject.tag = "Tube";
-        currentTube = tubeObject.AddComponent<ProceduralTube>();
-        currentTube.material = material;
     }
 
     // Updates the line by adding points to the tube
     void UpdateLine(OVRInput.Controller controller)
     {
-        if (isDrawing)
+        Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(controller);
+        Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(controller);
+
+        // Set the rotation offset based on the active controller
+        if (controller == OVRInput.Controller.LTouch)
         {
-            Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(controller);
-            Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(controller);
-
-            // Draw a point 0.095m below the controller (at the tip)
-            if (controller == OVRInput.Controller.LTouch)
-            {
-                rotationCheck = new Vector3(45, 0, -5);
-            }
-            else
-            {
-                rotationCheck = new Vector3(45, 0, 5);
-            }
-            Vector3 downDirection = controllerRotation * Quaternion.Euler(rotationCheck) * new Vector3(-0.01f, -1, 0);
-            Vector3 drawpoint = controllerPosition + downDirection * 0.095f;
-            
-            if (!isFirstPoint)
-            {
-                drawpoint = Vector3.Lerp(lastDrawPoint, drawpoint, 0.5f);
-                lastDrawPoint = drawpoint;
-            }
-            else
-            {
-                lastDrawPoint = drawpoint;
-                isFirstPoint = false;
-            }
-            currentTube.AddPoint(drawpoint);
+            rotationCheck = new Vector3(45, 0, -5);
         }
-    }
+        else
+        {
+            rotationCheck = new Vector3(45, 0, 5);
+        }
 
-    // Stops drawing
-    void StopDrawing()
-    {
-        isDrawing = false;
+        // Draw a point 0.095m below the controller (at the tip)
+        Vector3 downDirection = controllerRotation * Quaternion.Euler(rotationCheck) * new Vector3(-0.01f, -1, 0);
+        Vector3 drawpoint = controllerPosition + downDirection * 0.095f;
+        
+        if (!isFirstPoint)
+        {
+            drawpoint = Vector3.Lerp(lastDrawPoint, drawpoint, 0.5f);
+            lastDrawPoint = drawpoint;
+        }
+        else
+        {
+            lastDrawPoint = drawpoint;
+            isFirstPoint = false;
+        }
+        currentTube.AddPoint(drawpoint);
     }
 }

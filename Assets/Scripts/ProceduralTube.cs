@@ -30,7 +30,7 @@ namespace Unity.ProceduralTube
             public PointsData(Vector3 point)
             {
                 this.point = point;
-                time = DateTime.Now.ToString("HH:mm:ss");
+                time = DateTime.Now.ToString("HH:mm:ss.fff");
             }
 
             public override string ToString()

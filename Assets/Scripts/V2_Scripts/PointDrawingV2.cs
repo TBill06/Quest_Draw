@@ -24,11 +24,12 @@ public class PointDrawingV2 : MonoBehaviour
     private OneEuroFilter<Vector3> vector3Filter;
     private Hand hand;
     private bool indexPointerPoseDetected = false;
-    private bool isDrawing = false;
+    private bool createNewTube = true;
     private bool _startedDrawing = false;
     private bool _finishedDrawing = false;
     private int frames = 0;
     private ProceduralTube currentTube;
+    private Vector3 prevPose1;
 
     public bool startedDrawing
     {
@@ -44,6 +45,7 @@ public class PointDrawingV2 : MonoBehaviour
 
     void Start()
     {
+        // Set the hand and pose to use
         int left = PlayerPrefs.GetInt("left");
         if (left == 1)
         {
@@ -61,10 +63,12 @@ public class PointDrawingV2 : MonoBehaviour
 
     void Update()
     {
+        // Check if the script should run and reset the variables
         if (!ScriptManager.shouldRun)
         {
             startedDrawing = false;
             finishedDrawing = false;
+            createNewTube = true;
             frames = 0;
             return;
         }
@@ -72,10 +76,15 @@ public class PointDrawingV2 : MonoBehaviour
         if (indexPointerPoseDetected)
         {
             frames = 0;
-            if (!isDrawing)
+            if (createNewTube)
             {
-                StartDrawing();
+                createNewTube = false;
                 startedDrawing = true;
+                GameObject tubeObject = new GameObject("Tube");
+                tubeObject.tag = "Tube";
+                vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
+                currentTube = tubeObject.AddComponent<ProceduralTube>();
+                currentTube.material = tubeMaterial;
             }
             UpdateLine();
         }
@@ -84,9 +93,8 @@ public class PointDrawingV2 : MonoBehaviour
             if (startedDrawing)
             {
                 frames++;
-                if (frames > 10) { finishedDrawing = true; }
+                if (frames > 20) { finishedDrawing = true; }
             }
-            StopDrawing();
         }
     }
 
@@ -96,39 +104,28 @@ public class PointDrawingV2 : MonoBehaviour
         indexPointerPoseDetected = detected;
     }
 
-    // Initializes a new tube object
-    void StartDrawing()
-    {
-        isDrawing = true;
-
-        // Initialize the filter and the tube object
-        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency,minCutoff,beta,dcutoff);
-        GameObject tubeObject = new GameObject("Tube");
-        tubeObject.tag = "Tube";
-        currentTube = tubeObject.AddComponent<ProceduralTube>();
-        currentTube.material = tubeMaterial;
-    }
-
     // Updates the line by adding points to the tube
     void UpdateLine()
     {
-        if (isDrawing)
+        // Get the position of the index finger tip
+        Pose pose1;
+        bool pose1Valid = hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
+
+        // Check and update the previous poses
+        if (pose1Valid)
         {
-            // Get the position of the index finger tip
-            Pose pose1;
-            hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
-
-            // Filter the hand position
-            Vector3 filteredPoint = vector3Filter.Filter(pose1.position);
-
-            // Add the point to the tube
-            currentTube.AddPoint(filteredPoint);
+            prevPose1 = pose1.position;
         }
-    }
+        else
+        {
+            Debug.Log("Using Previous poses");
+            pose1.position = prevPose1;
+        }
 
-    // Stops drawing
-    void StopDrawing()
-    {
-        isDrawing = false;
+        // Filter the hand position
+        Vector3 filteredPoint = vector3Filter.Filter(pose1.position);
+
+        // Add the point to the tube
+        currentTube.AddPoint(filteredPoint);
     }
 }

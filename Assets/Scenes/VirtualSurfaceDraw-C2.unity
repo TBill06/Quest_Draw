@@ -160,7 +160,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &157377426
 MonoBehaviour:
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S0
   num: 0
-  complexity: 0
+  complexity: 1
 --- !u!114 &157377427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,8 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb97f1b853aaf544b8bbcd733cbd3646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftTubeMaterial: {fileID: 2100000, guid: 8d7cbef7ea8e37c4bb7cfba3786c0b2b, type: 2}
-  rightTubeMaterial: {fileID: 2100000, guid: 8d7cbef7ea8e37c4bb7cfba3786c0b2b, type: 2}
+  tubeMaterial: {fileID: 0}
   board: {fileID: 1635950331}
   capsule: {fileID: 489158392}
 --- !u!114 &215073114
@@ -303,7 +302,7 @@ MonoBehaviour:
   rightHand: {fileID: 1704659480}
   leftHand: {fileID: 1704659479}
   numberOfBlocks: 1
-  timeToShowStroke: 5
+  timeToShowStroke: 2
   timeBreakBetweenDrawing: 2
 --- !u!114 &215073115
 MonoBehaviour:
@@ -402,7 +401,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &295354057
 MonoBehaviour:
@@ -418,7 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S5
   num: 5
-  complexity: 1
+  complexity: 2
 --- !u!114 &295354058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -592,6 +591,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1499077491}
   - {fileID: 1542766507}
   - {fileID: 1029541721}
   - {fileID: 1653669663}
@@ -936,7 +936,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &501528654
 MonoBehaviour:
@@ -952,7 +952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S1
   num: 1
-  complexity: 0
+  complexity: 1
 --- !u!114 &501528655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1175,7 +1175,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &812369144
 MonoBehaviour:
@@ -1191,7 +1191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S9
   num: 9
-  complexity: 2
+  complexity: 3
 --- !u!114 &812369145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1287,7 +1287,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &982517888
 MonoBehaviour:
@@ -1303,7 +1303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S11
   num: 11
-  complexity: 2
+  complexity: 3
 --- !u!114 &982517889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1513,8 +1513,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1172314164}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.4}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0013468014, y: 0.0013468014, z: 0.0013468014}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1612,7 +1612,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &1172314171
 Canvas:
   m_ObjectHideFlags: 0
@@ -1622,7 +1622,7 @@ Canvas:
   m_GameObject: {fileID: 1172314164}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 2
   m_Camera: {fileID: 1704659483}
   m_PlaneDistance: 0.4
   m_PixelPerfect: 0
@@ -1660,7 +1660,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1399300798}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1982,13 +1982,13 @@ Transform:
   m_GameObject: {fileID: 1499077490}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2023666200}
   - {fileID: 1399300799}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 312987621}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1506564404
 GameObject:
@@ -2027,7 +2027,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1506564406
 MonoBehaviour:
@@ -2043,7 +2043,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S0
   num: 2
-  complexity: 0
+  complexity: 1
 --- !u!114 &1506564407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2113,6 +2113,14 @@ PrefabInstance:
     - target: {fileID: 5585472341044302537, guid: 7bde95cb984c401499abbfaa6168cad9, type: 3}
       propertyPath: m_Name
       value: WallBoard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7838040551866693765, guid: 7bde95cb984c401499abbfaa6168cad9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7838040551866693765, guid: 7bde95cb984c401499abbfaa6168cad9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 7838040551866693765, guid: 7bde95cb984c401499abbfaa6168cad9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2201,7 +2209,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1593307673
 MonoBehaviour:
@@ -2217,7 +2225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S8
   num: 8
-  complexity: 2
+  complexity: 3
 --- !u!114 &1593307674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2318,7 +2326,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1644341585
 MonoBehaviour:
@@ -2334,7 +2342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S3
   num: 3
-  complexity: 0
+  complexity: 1
 --- !u!114 &1644341586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2552,7 +2560,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1679741521
 MonoBehaviour:
@@ -2568,7 +2576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S7
   num: 7
-  complexity: 1
+  complexity: 2
 --- !u!114 &1679741522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2831,7 +2839,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1880916395
 MonoBehaviour:
@@ -2847,7 +2855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S4
   num: 4
-  complexity: 1
+  complexity: 2
 --- !u!114 &1880916396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3201,7 +3209,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1902987782
 MonoBehaviour:
@@ -3217,7 +3225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S10
   num: 10
-  complexity: 2
+  complexity: 3
 --- !u!114 &1902987783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3306,6 +3314,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190071815658, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190071815658, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190071815658, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
@@ -3449,7 +3461,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827361, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3501,7 +3513,7 @@ PrefabInstance:
       objectReference: {fileID: 1704659483}
     - target: {fileID: 2859147190566827368, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_RenderMode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827368, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_PlaneDistance
@@ -3513,7 +3525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190566827369, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2859147191208444800, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3606,7 +3618,6 @@ GameObject:
   - component: {fileID: 2128538407}
   - component: {fileID: 2128538406}
   - component: {fileID: 2128538405}
-  - component: {fileID: 2128538404}
   m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
@@ -3631,23 +3642,8 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2128538404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2128538402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ebfa50969795b04ba06448022e9852c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sName: S0
-  num: 0
-  complexity: 0
 --- !u!114 &2128538405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3743,7 +3739,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2134411684
 MonoBehaviour:
@@ -3759,7 +3755,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sName: S6
   num: 6
-  complexity: 1
+  complexity: 2
 --- !u!114 &2134411685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3828,4 +3824,3 @@ SceneRoots:
   - {fileID: 312987621}
   - {fileID: 555023121}
   - {fileID: 1445311250}
-  - {fileID: 1499077491}

@@ -21,10 +21,11 @@ public class PinchDrawingV2 : MonoBehaviour
     private OneEuroFilter<Vector3> vector3Filter;
     private Hand hand;
     private ProceduralTube currentTube;
-    private bool isDrawing = false;
+    private bool createNewTube = true;
     private bool _startedDrawing = false;
     private bool _finishedDrawing = false;
     private int frames = 0;
+    private Vector3 prevPose1, prevPose2;
 
     public bool startedDrawing
     {
@@ -40,6 +41,7 @@ public class PinchDrawingV2 : MonoBehaviour
 
     void Start()
     {
+        // Set the hand to use
         int left = PlayerPrefs.GetInt("left");
         if (left == 1)
             hand = leftHand;
@@ -49,10 +51,12 @@ public class PinchDrawingV2 : MonoBehaviour
 
     void Update()
     {
+        // Check if the script should run and reset the variables
         if (!ScriptManager.shouldRun)
         {
             startedDrawing = false;
             finishedDrawing = false;
+            createNewTube = true;
             frames = 0;
             return;
         }
@@ -60,10 +64,15 @@ public class PinchDrawingV2 : MonoBehaviour
         if (hand.GetIndexFingerIsPinching())
         {
             frames = 0;
-            if (!isDrawing)
+            if (createNewTube)
             {
-                StartDrawing();
+                createNewTube = false;
                 startedDrawing = true;
+                GameObject tubeObject = new GameObject("Tube");
+                tubeObject.tag = "Tube";
+                vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
+                currentTube = tubeObject.AddComponent<ProceduralTube>();
+                currentTube.material = tubeMaterial;
             }
             UpdateLine();
         }
@@ -72,50 +81,39 @@ public class PinchDrawingV2 : MonoBehaviour
             if (startedDrawing)
             {
                 frames++;
-                if (frames > 200) { finishedDrawing = true; }
+                if (frames > 20) { finishedDrawing = true; }
             }
-            StopDrawing();
         }
-    }
-
-    // Initializes a new tube object
-    void StartDrawing()
-    {
-        isDrawing = true;
-        
-        // Initialize the filter and the tube object
-        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency,minCutoff,beta,dcutoff);
-        GameObject tubeObject = new GameObject("Tube");
-        tubeObject.tag = "Tube";
-        currentTube = tubeObject.AddComponent<ProceduralTube>();
-        currentTube.material = tubeMaterial;
-
     }
 
     // Updates the line by adding points to the tube
     void UpdateLine()
     {
-        if (isDrawing)
+        // Get the hand positions
+        Pose pose1;
+        Pose pose2;
+        bool pose1Valid = hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
+        bool pose2Valid = hand.GetJointPose(HandJointId.HandThumbTip, out pose2);
+
+        // Check and update the previous poses
+        if (pose1Valid && pose2Valid)
         {
-            // Get the hand positions
-            Pose pose1;
-            Pose pose2;
-            hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
-            hand.GetJointPose(HandJointId.HandThumbTip, out pose2);
-
-            // Filter the hand positions
-            Vector3 filter1 = vector3Filter.Filter(pose1.position);
-            Vector3 filter2 = vector3Filter.Filter(pose2.position);
-            Vector3 drawpoint = (filter1 + filter2) / 2;
-            
-            // Add point to the tube
-            currentTube.AddPoint(drawpoint);
+            prevPose1 = pose1.position;
+            prevPose2 = pose2.position;
         }
-    }
+        else
+        {
+            Debug.Log("Using Previous poses");
+            pose1.position = prevPose1;
+            pose2.position = prevPose2;
+        }
 
-    // Stops drawing
-    void StopDrawing()
-    {
-        isDrawing = false;
+        // Filter the hand positions
+        Vector3 filter1 = vector3Filter.Filter(pose1.position);
+        Vector3 filter2 = vector3Filter.Filter(pose2.position);
+        Vector3 drawpoint = (filter1 + filter2) / 2;
+        
+        // Add point to the tube
+        currentTube.AddPoint(drawpoint);
     }
 }

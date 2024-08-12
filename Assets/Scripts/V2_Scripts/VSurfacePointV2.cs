@@ -25,18 +25,20 @@ public class VSurfacePointV2 : MonoBehaviour
     public float beta = 10f;
     public float dcutoff = 1.0f;
 
-    private OneEuroFilter<Vector2> vector2Filter;
+    private OneEuroFilter<Vector3> vector3Filter;
     private Hand hand;
     private ProceduralTube currentTube;
-    private bool wasPointing = false;
-    private bool createNewTube = false;
+    private bool createNewTube = true;
     private bool indexPointerPoseDetected = false;
     private int frames = 0;
     private bool _startedDrawing = false;
     private bool _finishedDrawing = false;
     private Vector3 midPoint, indexDirection, edgePoint;
-    private float distance, length;
+    private float length;
     private BoxCollider boxCollider;
+    private Vector3 prevPose1, prevPose2;
+    private bool hasHitOnce = false;
+    private float rayLength, rayLengthMax;
 
     public bool startedDrawing
     {
@@ -52,6 +54,7 @@ public class VSurfacePointV2 : MonoBehaviour
 
     void Start()
     {
+        // Set the hand and pose to use
         int left = PlayerPrefs.GetInt("left");
         if (left == 1)
         {
@@ -66,7 +69,7 @@ public class VSurfacePointV2 : MonoBehaviour
             poseDetector_R.SetActive(true);
         }
 
-        vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
+        // Get the board's collider
         if(board != null)
         {
             Transform boardChild = board.transform.GetChild(0);
@@ -76,57 +79,72 @@ public class VSurfacePointV2 : MonoBehaviour
 
     void Update()
     {
+        // Check if the script should run and reset the variables
         if (!ScriptManager.shouldRun)
         {
             startedDrawing = false;
             finishedDrawing = false;
+            createNewTube = true;
             frames = 0;
             return;
         }
             
         if(indexPointerPoseDetected)
         {
+            // Get hand poses
             frames = 0;
-            if(!wasPointing)
+            Pose pose1, pose2;
+            bool pose1Valid = hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
+            bool pose2Valid = hand.GetJointPose(HandJointId.HandIndex1, out pose2);
+            
+            // Check and update the previous poses
+            if (pose1Valid && pose2Valid)
             {
-                createNewTube = true;
+                prevPose1 = pose1.position;
+                prevPose2 = pose2.position;
+            }
+            else
+            {
+                Debug.Log("Using Previous poses");
+                pose1.position = prevPose1;
+                pose2.position = prevPose2;
             }
 
-            Pose pose1, pose2;
-            hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
-            hand.GetJointPose(HandJointId.HandIndex1, out pose2);
-            
+            // Calculate capsule parameters
             midPoint = (pose1.position + pose2.position) / 2;
             indexDirection = (pose1.position - pose2.position).normalized;
             
             midPoint -= indexDirection * 0.04f;
-            distance = Vector3.Distance(pose1.position, pose2.position);
+            length = Vector3.Distance(pose1.position, pose2.position);
 
-            length = (distance / 2) + 0.05f;
+            length += 0.01f;
             edgePoint = midPoint - (indexDirection * length);
 
             capsule.transform.position = midPoint;
             capsule.transform.rotation = Quaternion.LookRotation(indexDirection) * Quaternion.Euler(90, 0, 0);
-            capsule.transform.localScale = new Vector3(0.008f, length, 0.008f);
+            capsule.transform.localScale = new Vector3(0.005f, length, 0.005f);
 
+            // Set ray parameters
             Ray ray = new Ray(edgePoint, indexDirection);
-            if(boxCollider.Raycast(ray, out RaycastHit hit, length*2f))
+            rayLength = length * 2.0f;
+            rayLengthMax = length * 3.0f;
+            float currentRayLength = hasHitOnce ? rayLengthMax : rayLength;
+
+            // Raycast to the board
+            if(boxCollider.Raycast(ray, out RaycastHit hit, currentRayLength))
             {
+                hasHitOnce = true;
                 if(createNewTube)
                 {
+                    createNewTube = false;
                     startedDrawing = true;
                     GameObject tubeObject = new GameObject("Tube");
                     tubeObject.tag = "Tube";
-                    vector2Filter = new OneEuroFilter<Vector2>(filterFrequency, minCutoff, beta, dcutoff);
+                    vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
                     currentTube = tubeObject.AddComponent<ProceduralTube>();
                     currentTube.material = tubeMaterial;
-                    createNewTube = false;
                 }
-                UpdateLine(hit.point, hit.normal);    
-            }
-            else
-            {
-                createNewTube = true;
+                UpdateLine(hit.point, hit.normal);
             }
         }
         else
@@ -134,19 +152,18 @@ public class VSurfacePointV2 : MonoBehaviour
             if (startedDrawing)
             {
                 frames++;
-                if (frames > 200) { finishedDrawing = true; }
+                if (frames > 20) { finishedDrawing = true; hasHitOnce = false; }
             }
         }
-        wasPointing = indexPointerPoseDetected;
     }
 
+    // Adds filtered point to the tube
     void UpdateLine(Vector3 point, Vector3 normal)
     {
         Vector3 offsetPoint = point + normal * 0.01f;
-        Vector2 point2D = new Vector2(offsetPoint.x, offsetPoint.y);
-        Vector2 filterPoint = vector2Filter.Filter(point2D);
-        Vector3 finalPoint = new Vector3(filterPoint.x, filterPoint.y, offsetPoint.z);
-        currentTube.AddPoint(finalPoint);
+        Vector3 point3D = new Vector3(offsetPoint.x, offsetPoint.y, offsetPoint.z);
+        Vector3 filterPoint = vector3Filter.Filter(point3D);
+        currentTube.AddPoint(filterPoint);
     }
 
     // Public method to set the index finger pose detected

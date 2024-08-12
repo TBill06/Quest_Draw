@@ -37,7 +37,7 @@ public class Setup : MonoBehaviour
         PlayerPrefs.SetInt("left", isLeft ? 1 : 0);
 
         // Set the file path
-        // SaveData.SetFilePath(PlayerPrefs.GetInt("pid"));
+        SaveData.SetFilePath(PlayerPrefs.GetInt("pid"));
 
         if (PlayerPrefs.GetInt("conditionState") > 8) 
         {   
