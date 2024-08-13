@@ -142,7 +142,7 @@ public class VSurfaceControllerV2 : MonoBehaviour
     // Updates the line by adding points to the tube
     void UpdateLine(Vector3 point, Vector3 normal)
     {
-        Vector3 drawPoint = point + normal * 0.01f;  
+        Vector3 drawPoint = point + normal * 0.015f;  
         if (!isFirstPoint)
         {
             drawPoint = Vector3.Lerp(lastDrawPoint, drawPoint, 0.5f);

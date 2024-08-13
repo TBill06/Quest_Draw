@@ -149,7 +149,7 @@ public class VSurfacePinchV2 : MonoBehaviour
     // Adds filtered point to the tube
     void UpdateLine(Vector3 point, Vector3 normal)
     {
-        Vector3 offsetPoint = point + normal * 0.01f;
+        Vector3 offsetPoint = point + normal * 0.015f;
         Vector3 point3D = new Vector3(offsetPoint.x, offsetPoint.y, offsetPoint.z);
         Vector3 filterPoint = vector3Filter.Filter(point3D);
         currentTube.AddPoint(filterPoint);
