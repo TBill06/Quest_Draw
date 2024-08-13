@@ -162,8 +162,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 378.99, y: -46.405}
-  m_SizeDelta: {x: 697.98, y: 32.81}
+  m_AnchoredPosition: {x: 211.87, y: -46.405}
+  m_SizeDelta: {x: 363.74, y: 32.81}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &99650256
 MonoBehaviour:
@@ -1002,8 +1002,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 378.99, y: -92.189995}
-  m_SizeDelta: {x: 697.98, y: 18.76}
+  m_AnchoredPosition: {x: 211.87, y: -110.945}
+  m_SizeDelta: {x: 363.74, y: 56.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &824801529
 MonoBehaviour:
@@ -1025,8 +1025,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Input your condition number. If this is the first condition, leave this
-    blank. Press "Enter" to continue.
+  m_text: 'Input your condition number.
+
+    If this is the first condition, leave
+    this blank.
+
+    Press "Enter" to continue.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dda8d4d183f898241969906ee2a03d81, type: 2}
   m_sharedMaterial: {fileID: 7032093815205813286, guid: dda8d4d183f898241969906ee2a03d81, type: 2}
@@ -1061,7 +1065,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1597,8 +1601,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 378.99, y: -46.405}
-  m_SizeDelta: {x: 697.98, y: 32.81}
+  m_AnchoredPosition: {x: 211.87, y: -46.405}
+  m_SizeDelta: {x: 363.74, y: 32.81}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1284251613
 MonoBehaviour:
@@ -1792,10 +1796,10 @@ RectTransform:
   - {fileID: 1590546928}
   m_Father: {fileID: 79253594}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 75.25998, y: -241.65251}
-  m_SizeDelta: {x: 757.98, y: 131.56999}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 211.87, y: -234.85999}
+  m_SizeDelta: {x: 423.74, y: 169.08}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1590546927
 GameObject:
@@ -1831,8 +1835,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 378.99, y: -92.189995}
-  m_SizeDelta: {x: 697.98, y: 18.76}
+  m_AnchoredPosition: {x: 211.87, y: -110.945}
+  m_SizeDelta: {x: 363.74, y: 56.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1590546929
 MonoBehaviour:
@@ -1854,8 +1858,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Input your block number. If this is the first block, leave this blank.
-    Press "Enter" to continue.
+  m_text: 'Input your block number.
+
+    If this is the first block, leave this blank.
+
+    Press
+    "Enter" to continue.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dda8d4d183f898241969906ee2a03d81, type: 2}
   m_sharedMaterial: {fileID: 7032093815205813286, guid: dda8d4d183f898241969906ee2a03d81, type: 2}
@@ -1890,7 +1898,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -2454,8 +2462,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 378.99, y: -197.35498}
-  m_SizeDelta: {x: 757.98, y: 131.56999}
+  m_AnchoredPosition: {x: 211.87, y: -234.85999}
+  m_SizeDelta: {x: 423.74, y: 169.08}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2145694793
 MonoBehaviour:
@@ -2954,5 +2962,5 @@ SceneRoots:
   - {fileID: 1765876511}
   - {fileID: 2087692222}
   - {fileID: 1976929697}
-  - {fileID: 255422860}
   - {fileID: 1954763760}
+  - {fileID: 255422860}

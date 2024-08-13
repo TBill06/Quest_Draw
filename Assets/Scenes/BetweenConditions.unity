@@ -181,7 +181,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_text
-      value: When you are ready to begin press "Ready".
+      value: 'Please walk to the respective board.
+
+        When you are ready to
+        begin press "Ready".'
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_fontSize
@@ -190,6 +193,10 @@ PrefabInstance:
     - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_fontSizeBase
       value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859147190401906338, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 2859147190401906339, guid: b16424dcc3deba241b1457370a8e5b5e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -496,6 +503,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 419001355}
     - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _hoverColorState.Color.a
+      value: 0.78431374
+      objectReference: {fileID: 0}
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _hoverColorState.Color.b
       value: 0.12941177
       objectReference: {fileID: 0}
@@ -509,7 +520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _normalColorState.Color.a
-      value: 1
+      value: 0.5882353
       objectReference: {fileID: 0}
     - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _normalColorState.Color.b
@@ -525,7 +536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _selectColorState.Color.a
-      value: 0.19607843
+      value: 0.98039216
       objectReference: {fileID: 0}
     - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _selectColorState.Color.b
@@ -565,7 +576,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3677522075262336289, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _color.a
-      value: 1
+      value: 0.5882353
       objectReference: {fileID: 0}
     - target: {fileID: 3677522075262336289, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _color.b
@@ -658,6 +669,10 @@ PrefabInstance:
     - target: {fileID: 6250598273065110816, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: m_SizeDelta.y
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250598273065110816, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8465309413322452779, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: m_LocalScale.x

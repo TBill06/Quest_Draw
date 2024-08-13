@@ -19,7 +19,7 @@ public class MenuPosition : MonoBehaviour
                     var rotation = anchor.transform.rotation;
 
                     // Set transform of the menu
-                    transform.position = new Vector3(position.x-2f, position.y, position.z+0.2f);
+                    transform.position = new Vector3(position.x-2f, position.y, position.z+0.15f);
                     transform.rotation *= rotation;
                 }
             }

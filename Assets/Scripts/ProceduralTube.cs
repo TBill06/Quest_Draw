@@ -25,12 +25,12 @@ namespace Unity.ProceduralTube
         public class PointsData
         {
             public Vector3 point;
-            public string time;
+            public long time;
 
             public PointsData(Vector3 point)
             {
                 this.point = point;
-                time = DateTime.Now.ToString("HH:mm:ss.fff");
+                time = DateTime.Now.Ticks;
             }
 
             public override string ToString()

@@ -86,35 +86,28 @@ public class TaskManager : MonoBehaviour
 
             // Show stroke
             case (Status.ShowStroke):
-                // Debug.Log("1 -- Showing Stroke");
 
                 if (timeRemaining < 0) {
                     strokeManager.HideStroke();
                     status = Status.BlankBeforeDraw;
+                    SaveData.SetTimeTrialStart();
                 }
 
                 break;
 
+            // Before drawing
             case (Status.BlankBeforeDraw):
-                // Debug.Log("BlankBeforeDraw Property Check startedDrawing: " + propertyCheck("startedDrawing"));
-                // Debug.Log("BlankBeforeDraw Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
 
-                // Switch this based on what the condition is 
-                // (i.e. controller, pinch, or index)
-                // In the IsDrawing function
-               SaveData.SetTimeTrialStart();
                 ScriptManager.shouldRun = true;
                 if (propertyCheck("startedDrawing")) {
                     status = Status.Drawing;
-                   SaveData.SetTimeDrawStart();
+                    SaveData.SetTimeDrawStart();
                 }
 
                 break;
             
             // When drawing
             case (Status.Drawing):
-                // Debug.Log("Drawing Property Check startedDrawing: " + propertyCheck("startedDrawing"));
-                // Debug.Log("Drawing Property Check finishedDrawing: " + propertyCheck("finishedDrawing"));
 
                 if (propertyCheck("finishedDrawing")) {
                     status = Status.BlankBeforeShowStroke;
@@ -128,7 +121,6 @@ public class TaskManager : MonoBehaviour
             
             // After drawing
             case (Status.BlankBeforeShowStroke):
-                // Debug.Log("4 -- Blank Before Show Stroke");
 
                 ScriptManager.shouldRun = false;
                 if (timeRemaining < 0) {

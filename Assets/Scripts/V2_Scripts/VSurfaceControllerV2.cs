@@ -101,14 +101,10 @@ public class VSurfaceControllerV2 : MonoBehaviour
             length += 0.01f;
             edgePoint = midPoint - (downDirection * length);
 
-            capsule.transform.position = midPoint;
-            capsule.transform.rotation = Quaternion.LookRotation(downDirection) * Quaternion.Euler(90, 0, 0);
-            capsule.transform.localScale = new Vector3(0.005f, length, 0.005f);
-
             // Set ray parameters
             Ray ray = new Ray(edgePoint, downDirection);
             rayLength = length * 2.0f;
-            rayLengthMax = length * 3.0f;
+            rayLengthMax = length * 2.5f;
             float currentRayLength = hasHitOnce ? rayLengthMax : rayLength;
 
             // Raycast to the board
@@ -128,14 +124,23 @@ public class VSurfaceControllerV2 : MonoBehaviour
                 }
                 UpdateLine(hit.point, hit.normal);
             }
+            else
+            {
+                FinishDrawing();
+            }
         }
         else
         {
-            if (startedDrawing)
-            {
-                frames++;
-                if (frames > 20) { finishedDrawing = true; hasHitOnce = false; }
-            }
+            FinishDrawing();
+        }
+    }
+
+    void FinishDrawing()
+    {
+        if (startedDrawing)
+        {
+            frames++;
+            if (frames > 20) { finishedDrawing = true; hasHitOnce = false; }
         }
     }
 

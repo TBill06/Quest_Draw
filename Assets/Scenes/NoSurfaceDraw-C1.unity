@@ -2747,7 +2747,7 @@ MonoBehaviour:
   startBlock: {fileID: 88155937}
   rightHand: {fileID: 337970205}
   leftHand: {fileID: 337970206}
-  numberOfBlocks: 1
+  numberOfBlocks: 2
   timeToShowStroke: 2
   timeBreakBetweenDrawing: 2
 --- !u!114 &1607494502
