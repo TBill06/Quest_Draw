@@ -14,7 +14,6 @@ public class VSurfaceControllerV2 : MonoBehaviour
 {
     public Material tubeMaterial;
     public GameObject board;
-    public GameObject capsule;
     private ProceduralTube currentTube;
     private bool createNewTube = true;
     private bool _startedDrawing = false;
@@ -76,7 +75,6 @@ public class VSurfaceControllerV2 : MonoBehaviour
         // Check if the controller is active
         if (activeController != OVRInput.Controller.None)
         {
-            frames = 0;
             Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(activeController);
             Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(activeController);
 
@@ -90,7 +88,7 @@ public class VSurfaceControllerV2 : MonoBehaviour
                 rotationCheck = new Vector3(45, 0, 5);
             }
 
-            // Calculate capsule parameters
+            // Calculate ray parameters
             downDirection = controllerRotation * Quaternion.Euler(rotationCheck) * new Vector3(-0.01f, -1, 0);
             controllerTipPosition = controllerPosition + downDirection * 0.095f;
 
@@ -104,12 +102,13 @@ public class VSurfaceControllerV2 : MonoBehaviour
             // Set ray parameters
             Ray ray = new Ray(edgePoint, downDirection);
             rayLength = length * 2.0f;
-            rayLengthMax = length * 2.5f;
+            rayLengthMax = length * 2.1f;
             float currentRayLength = hasHitOnce ? rayLengthMax : rayLength;
 
             // Raycast to the board
             if(boxCollider.Raycast(ray, out RaycastHit hit, currentRayLength))
             {
+                frames = 0;
                 hasHitOnce = true;
                 if (createNewTube)
                 {
@@ -140,7 +139,7 @@ public class VSurfaceControllerV2 : MonoBehaviour
         if (startedDrawing)
         {
             frames++;
-            if (frames > 20) { finishedDrawing = true; hasHitOnce = false; }
+            if (frames > 10) { finishedDrawing = true; hasHitOnce = false; }
         }
     }
 

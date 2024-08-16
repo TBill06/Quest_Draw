@@ -929,6 +929,16 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &806160736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1450014691472914184, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+  m_PrefabInstance: {fileID: 203873807}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &806160737 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1450014691472908700, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+  m_PrefabInstance: {fileID: 203873807}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &929212566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1991,6 +2001,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f1c5803c3551b4f9f68fb00a3c9378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftHandAnchor: {fileID: 806160737}
+  rightHandAnchor: {fileID: 806160736}
 --- !u!1 &1468112088
 GameObject:
   m_ObjectHideFlags: 0
@@ -3035,8 +3047,8 @@ MonoBehaviour:
   startBlock: {fileID: 1206143521}
   rightHand: {fileID: 203873811}
   leftHand: {fileID: 203873812}
-  numberOfBlocks: 2
-  timeToShowStroke: 2
+  numberOfBlocks: 3
+  timeToShowStroke: 5
   timeBreakBetweenDrawing: 2
 --- !u!114 &1955476148
 MonoBehaviour:
@@ -3054,6 +3066,16 @@ MonoBehaviour:
   strokes:
   - {fileID: 1041388530}
   - {fileID: 1722327377}
+  - {fileID: 615308344}
+  - {fileID: 1468112090}
+  - {fileID: 1971698920}
+  - {fileID: 603727701}
+  - {fileID: 561665180}
+  - {fileID: 929212568}
+  - {fileID: 296280316}
+  - {fileID: 1616665367}
+  - {fileID: 1689146390}
+  - {fileID: 1545555569}
 --- !u!4 &1955476149
 Transform:
   m_ObjectHideFlags: 0
@@ -3082,7 +3104,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tubeMaterial: {fileID: 2100000, guid: 8d7cbef7ea8e37c4bb7cfba3786c0b2b, type: 2}
-  capsule: {fileID: 0}
 --- !u!114 &1955476151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3100,7 +3121,6 @@ MonoBehaviour:
   tubeMaterial: {fileID: 2100000, guid: 8d7cbef7ea8e37c4bb7cfba3786c0b2b, type: 2}
   poseDetector_L: {fileID: 971071907}
   poseDetector_R: {fileID: 930079787}
-  capsule: {fileID: 0}
   filterFrequency: 90
   minCutoff: 1
   beta: 10
@@ -3120,7 +3140,6 @@ MonoBehaviour:
   leftHand: {fileID: 203873812}
   rightHand: {fileID: 203873811}
   tubeMaterial: {fileID: 2100000, guid: 8d7cbef7ea8e37c4bb7cfba3786c0b2b, type: 2}
-  capsule: {fileID: 0}
   filterFrequency: 90
   minCutoff: 1
   beta: 10
@@ -3181,6 +3200,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: TrackUpdates
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: PrefabsToSpawn.Array.data[8].Prefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1231668379462494, guid: 10fe2af0159f56e4395fa21beb64e559, type: 3}
     - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
       propertyPath: onPrefabSpawned.m_PersistentCalls.m_Calls.Array.size
       value: 4
@@ -3280,6 +3307,14 @@ PrefabInstance:
     - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
       propertyPath: onPrefabSpawned.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939721584549774602, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: EnableWorldLock
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939721584549774602, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: SceneSettings.DataSource
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

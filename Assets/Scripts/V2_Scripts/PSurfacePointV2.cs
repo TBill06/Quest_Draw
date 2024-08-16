@@ -8,7 +8,7 @@ using Meta.XR.MRUtilityKit;
 // This script draws on a physical board when user points with their index finger.
 // It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in physcial surface condition.
 // It uses the OneEuroFilter to filter the hand position data.
-// It uses the physcial board's MRUKAnchor and do raycasting to draw on the board.
+// It uses the physcial board's BoxCollider and do raycasting to draw on the board.
 // Open the palm (more specifically the thumb and middle finger) to stop pointing and hence stop drawing.
 // Parameters: Hand, tubeMaterial.
 public class PSurfacePointV2 : MonoBehaviour
@@ -18,13 +18,13 @@ public class PSurfacePointV2 : MonoBehaviour
     public Material tubeMaterial;
     public GameObject poseDetector_L;
     public GameObject poseDetector_R;
-    public GameObject capsule;
     public float filterFrequency = 90.0f;
     public float minCutoff = 1.0f;
     public float beta = 10f;
     public float dcutoff = 1.0f;
 
     private OneEuroFilter<Vector3> vector3Filter;
+    private OneEuroFilter<Vector3> vector3Filter2;
     private Hand hand;
     private ProceduralTube currentTube;
     private bool createNewTube = true;
@@ -34,7 +34,7 @@ public class PSurfacePointV2 : MonoBehaviour
     private int frames = 0;
     private Vector3 midPoint, indexDirection, edgePoint;
     private float length;
-    private MRUKAnchor boardObject;
+    private BoxCollider boxCollider;
     private Vector3 prevPose1, prevPose2;
     private bool hasHitOnce = false;
     private float rayLength, rayLengthMax;
@@ -67,6 +67,8 @@ public class PSurfacePointV2 : MonoBehaviour
             poseDetector_L.SetActive(false);
             poseDetector_R.SetActive(true);
         }
+        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
+        vector3Filter2 = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
     }
 
     void Update()
@@ -84,25 +86,24 @@ public class PSurfacePointV2 : MonoBehaviour
         if(indexPointerPoseDetected)
         {
             // Get hand poses
-            frames = 0;
             Pose pose1, pose2;
-            hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
-            hand.GetJointPose(HandJointId.HandIndex1, out pose2);
-
+            bool pose1Valid = hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
+            bool pose2Valid = hand.GetJointPose(HandJointId.HandIndex1, out pose2);
+            
             // Check and update the previous poses
-            if (pose1.position != Vector3.zero && pose2.position != Vector3.zero)
+            if (pose1Valid && pose2Valid)
             {
                 prevPose1 = pose1.position;
                 prevPose2 = pose2.position;
             }
             else
             {
-                Debug.Log("Using previous poses");
                 pose1.position = prevPose1;
                 pose2.position = prevPose2;
             }
 
-            // Calculate capsule parameters
+            // Calculate ray parameters
+            // Uses the index finger tip and the index finger 1st joint to calculate the ray parameters.
             midPoint = (pose1.position + pose2.position) / 2;
             indexDirection = (pose1.position - pose2.position).normalized;
             
@@ -112,15 +113,20 @@ public class PSurfacePointV2 : MonoBehaviour
             length += 0.01f;
             edgePoint = midPoint - (indexDirection * length);
 
+            // Filter the data
+            edgePoint = vector3Filter.Filter(edgePoint);
+            indexDirection = vector3Filter2.Filter(indexDirection);
+            
             // Set ray parameters
             Ray ray = new Ray(edgePoint, indexDirection);
             rayLength = length * 2.0f;
-            rayLengthMax = length * 2.5f;
+            rayLengthMax = length * 2.1f;
             float currentRayLength = hasHitOnce ? rayLengthMax : rayLength;
 
             // Raycast to the board
-            if(boardObject.Raycast(ray, currentRayLength, out RaycastHit hit))
+            if(boxCollider.Raycast(ray, out RaycastHit hit, currentRayLength))
             {
+                frames = 0;
                 hasHitOnce = true;
                 if(createNewTube)
                 {
@@ -129,6 +135,7 @@ public class PSurfacePointV2 : MonoBehaviour
                     GameObject tubeObject = new GameObject("Tube");
                     tubeObject.tag = "Tube";
                     vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
+                    vector3Filter2 = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
                     currentTube = tubeObject.AddComponent<ProceduralTube>();
                     currentTube.material = tubeMaterial;
                 }
@@ -150,7 +157,7 @@ public class PSurfacePointV2 : MonoBehaviour
         if (startedDrawing)
         {
             frames++;
-            if (frames > 20) { finishedDrawing = true; hasHitOnce = false; }
+            if (frames > 10) { finishedDrawing = true; hasHitOnce = false; }
         }
     }
 
@@ -158,9 +165,7 @@ public class PSurfacePointV2 : MonoBehaviour
     void UpdateLine(Vector3 point, Vector3 normal)
     {
         Vector3 offsetPoint = point + normal * 0.015f;
-        Vector3 point3D = new Vector3(offsetPoint.x, offsetPoint.y, offsetPoint.z);
-        Vector3 filterPoint = vector3Filter.Filter(point3D);
-        currentTube.AddPoint(filterPoint);
+        currentTube.AddPoint(offsetPoint);
     }
 
     // Public method to set the index finger pose detected
@@ -180,7 +185,9 @@ public class PSurfacePointV2 : MonoBehaviour
             {
                 if (anchor.Label.ToString() == "WALL_ART")
                 {
-                    boardObject = anchor;
+                    Transform wallChild = anchor.transform.GetChild(0);
+                    Transform wallGrandChild = wallChild.GetChild(0);
+                    boxCollider = wallGrandChild.GetComponent<BoxCollider>();
                     break;
                 }
             }

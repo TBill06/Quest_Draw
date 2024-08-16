@@ -837,6 +837,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomModel
       objectReference: {fileID: 0}
+    - target: {fileID: 2926632047262424768, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: TrackUpdates
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: PrefabsToSpawn.Array.data[8].Prefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1231668379462494, guid: 10fe2af0159f56e4395fa21beb64e559, type: 3}
     - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
       propertyPath: onPrefabSpawned.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -864,6 +876,14 @@ PrefabInstance:
     - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
       propertyPath: onPrefabSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939721584549774602, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: EnableWorldLock
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939721584549774602, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: SceneSettings.DataSource
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1427,6 +1447,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 88155936}
     m_Modifications:
+    - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
+      propertyPath: _interactableView
+      value: 
+      objectReference: {fileID: 375056249}
     - target: {fileID: 1157083696316441945, guid: c1591256d7c4d4d48a9dba5b24771e2c, type: 3}
       propertyPath: _hoverColorState.Color.a
       value: 0.78431374
@@ -2027,11 +2051,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825928845}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63f1c5803c3551b4f9f68fb00a3c9378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftHandAnchor: {fileID: 1955598635}
+  rightHandAnchor: {fileID: 1466172926}
 --- !u!1 &868483196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2565,6 +2591,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1466172926 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1450014691472914184, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+  m_PrefabInstance: {fileID: 337970201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1585989129
 GameObject:
   m_ObjectHideFlags: 0
@@ -2747,8 +2778,8 @@ MonoBehaviour:
   startBlock: {fileID: 88155937}
   rightHand: {fileID: 337970205}
   leftHand: {fileID: 337970206}
-  numberOfBlocks: 2
-  timeToShowStroke: 2
+  numberOfBlocks: 3
+  timeToShowStroke: 5
   timeBreakBetweenDrawing: 2
 --- !u!114 &1607494502
 MonoBehaviour:
@@ -2766,6 +2797,16 @@ MonoBehaviour:
   strokes:
   - {fileID: 49211883}
   - {fileID: 1616553513}
+  - {fileID: 1585989131}
+  - {fileID: 868483198}
+  - {fileID: 117212482}
+  - {fileID: 72828794}
+  - {fileID: 1026163054}
+  - {fileID: 1670037757}
+  - {fileID: 456336219}
+  - {fileID: 1953080758}
+  - {fileID: 2049215303}
+  - {fileID: 738888039}
 --- !u!114 &1607494503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3136,6 +3177,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953080756}
   m_CullTransparentMesh: 1
+--- !u!1 &1955598635 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1450014691472908700, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+  m_PrefabInstance: {fileID: 337970201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2049215301
 GameObject:
   m_ObjectHideFlags: 0

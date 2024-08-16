@@ -81,7 +81,7 @@ public class PinchDrawingV2 : MonoBehaviour
             if (startedDrawing)
             {
                 frames++;
-                if (frames > 20) { finishedDrawing = true; }
+                if (frames > 10) { finishedDrawing = true; }
             }
         }
     }
@@ -103,7 +103,6 @@ public class PinchDrawingV2 : MonoBehaviour
         }
         else
         {
-            Debug.Log("Using Previous poses");
             pose1.position = prevPose1;
             pose2.position = prevPose2;
         }

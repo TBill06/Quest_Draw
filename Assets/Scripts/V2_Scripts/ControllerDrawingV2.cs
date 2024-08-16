@@ -78,7 +78,7 @@ public class ControllerDrawingV2 : MonoBehaviour
             if (startedDrawing)
             {
                 frames++;
-                if (frames > 20) { finishedDrawing = true; }
+                if (frames > 10) { finishedDrawing = true; }
             }
         }
     }

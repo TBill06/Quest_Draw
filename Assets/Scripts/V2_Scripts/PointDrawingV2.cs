@@ -93,7 +93,7 @@ public class PointDrawingV2 : MonoBehaviour
             if (startedDrawing)
             {
                 frames++;
-                if (frames > 20) { finishedDrawing = true; }
+                if (frames > 10) { finishedDrawing = true; }
             }
         }
     }
@@ -118,7 +118,6 @@ public class PointDrawingV2 : MonoBehaviour
         }
         else
         {
-            Debug.Log("Using Previous poses");
             pose1.position = prevPose1;
         }
 

@@ -61,7 +61,8 @@ MonoBehaviour:
     DataSource: 0
     RoomIndex: -1
     RoomPrefabs: []
-    SceneJsons: []
+    SceneJsons:
+    - {fileID: 4900000, guid: 1b24c727bfb11314eb80da29c6f5d04c, type: 3}
     LoadSceneOnStartup: 1
     SeatWidth: 0.6
     SceneJson: 

@@ -2009,6 +2009,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: OVRCameraRigInteractionPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 1450014691483678752, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+      propertyPath: AllowRecenter
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1450014691483678752, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+      propertyPath: _localDimming
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1450014691483678752, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+      propertyPath: _trackingOriginType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1481518965435691247, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2057,6 +2069,16 @@ PrefabInstance:
 --- !u!20 &1765876512 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1450014691472023096, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+  m_PrefabInstance: {fileID: 1765876511}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1765876513 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1450014691472914184, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
+  m_PrefabInstance: {fileID: 1765876511}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1765876514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1450014691472908700, guid: a05848ce84caa744cbd3525cc692b211, type: 3}
   m_PrefabInstance: {fileID: 1765876511}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1806185243
@@ -2315,6 +2337,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f1c5803c3551b4f9f68fb00a3c9378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftHandAnchor: {fileID: 1765876514}
+  rightHandAnchor: {fileID: 1765876513}
 --- !u!114 &2003495903 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1429802675856937338, guid: 19bb7bce01441774f83f5221299e7f33, type: 3}
@@ -2382,6 +2406,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3803505148650197668, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: PrefabsToSpawn.Array.data[8].Prefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1231668379462494, guid: 10fe2af0159f56e4395fa21beb64e559, type: 3}
     - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
       propertyPath: onPrefabSpawned.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -2409,6 +2441,14 @@ PrefabInstance:
     - target: {fileID: 5383459912384573572, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
       propertyPath: onPrefabSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939721584549774602, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: SceneSettings.DataSource
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939721584549774602, guid: 9bb16f0066a57b54287e71a1a6176574, type: 3}
+      propertyPath: SceneSettings.LoadSceneOnStartup
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

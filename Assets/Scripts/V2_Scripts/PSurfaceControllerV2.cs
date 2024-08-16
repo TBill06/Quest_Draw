@@ -5,15 +5,14 @@ using Oculus.Interaction.Input;
 using Unity.ProceduralTube;
 using Meta.XR.MRUtilityKit;
 
-// This script draws on a physcial board when user holds the controller like a pen and presses the hand trigger.
-// It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in physcial surface condition.
+// This script draws on a physical board when user holds the controller like a pen and presses the hand trigger.
+// It uses the ProceduralTube component to draw the tubes. Ideal to use for our draw in physical surface condition.
 // Don't draw with both controllers at the same time.
-// It uses the physcial board's MRUKAnchor and do raycasting to draw on the board.
+// It uses the physical board's BoxCollider and do raycasting to draw on the board.
 // Parameters: tubeMaterial.
 public class PSurfaceControllerV2 : MonoBehaviour
 {
     public Material tubeMaterial;
-    public GameObject capsule;
     private ProceduralTube currentTube;
     private bool createNewTube = true;
     private bool _startedDrawing = false;
@@ -23,7 +22,7 @@ public class PSurfaceControllerV2 : MonoBehaviour
     private Vector3 rotationCheck, midPoint, downDirection, controllerTipPosition, edgePoint;
     private float length;
     private Vector3 lastDrawPoint;
-    private MRUKAnchor boardObject;
+    private BoxCollider boxCollider;
     private bool hasHitOnce = false;
     private float rayLength, rayLengthMax;
 
@@ -65,7 +64,6 @@ public class PSurfaceControllerV2 : MonoBehaviour
         // Check if the controller is active
         if (activeController != OVRInput.Controller.None)
         {
-            frames = 0;
             Vector3 controllerPosition = OVRInput.GetLocalControllerPosition(activeController);
             Quaternion controllerRotation = OVRInput.GetLocalControllerRotation(activeController);
 
@@ -79,7 +77,7 @@ public class PSurfaceControllerV2 : MonoBehaviour
                 rotationCheck = new Vector3(45, 0, 5);
             }
 
-            // Calculate capsule parameters
+            // Calculate ray parameters
             downDirection = controllerRotation * Quaternion.Euler(rotationCheck) * new Vector3(-0.01f, -1, 0);
             controllerTipPosition = controllerPosition + downDirection * 0.095f;
 
@@ -93,12 +91,13 @@ public class PSurfaceControllerV2 : MonoBehaviour
             // Set ray parameters
             Ray ray = new Ray(edgePoint, downDirection);
             rayLength = length * 2.0f;
-            rayLengthMax = length * 2.5f;
+            rayLengthMax = length * 2.1f;
             float currentRayLength = hasHitOnce ? rayLengthMax : rayLength;
 
             // Raycast to the board
-            if(boardObject.Raycast(ray, currentRayLength, out RaycastHit hit))
+            if(boxCollider.Raycast(ray, out RaycastHit hit, currentRayLength))
             {
+                frames = 0;
                 hasHitOnce = true;
                 if (createNewTube)
                 {
@@ -129,14 +128,14 @@ public class PSurfaceControllerV2 : MonoBehaviour
         if (startedDrawing)
         {
             frames++;
-            if (frames > 20) { finishedDrawing = true; hasHitOnce = false; }
+            if (frames > 10) { finishedDrawing = true; hasHitOnce = false; }
         }
     }
 
     // Updates the line by adding points to the tube
     void UpdateLine(Vector3 point, Vector3 normal)
     {
-        Vector3 drawPoint = point + normal * 0.015f;  
+        Vector3 drawPoint = point + normal * 0.015f;
         if (!isFirstPoint)
         {
             drawPoint = Vector3.Lerp(lastDrawPoint, drawPoint, 0.5f);
@@ -161,7 +160,9 @@ public class PSurfaceControllerV2 : MonoBehaviour
             {
                 if (anchor.Label.ToString() == "WALL_ART")
                 {
-                    boardObject = anchor;
+                    Transform wallChild = anchor.transform.GetChild(0);
+                    Transform wallGrandChild = wallChild.GetChild(0);
+                    boxCollider = wallGrandChild.GetComponent<BoxCollider>();
                     break;
                 }
             }

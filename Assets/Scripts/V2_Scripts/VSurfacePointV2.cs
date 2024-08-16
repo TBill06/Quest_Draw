@@ -19,13 +19,13 @@ public class VSurfacePointV2 : MonoBehaviour
     public GameObject poseDetector_L;
     public GameObject poseDetector_R;
     public GameObject board;
-    public GameObject capsule;
     public float filterFrequency = 90.0f;
     public float minCutoff = 1.0f;
     public float beta = 10f;
     public float dcutoff = 1.0f;
 
     private OneEuroFilter<Vector3> vector3Filter;
+    private OneEuroFilter<Vector3> vector3Filter2;
     private Hand hand;
     private ProceduralTube currentTube;
     private bool createNewTube = true;
@@ -75,6 +75,8 @@ public class VSurfacePointV2 : MonoBehaviour
             Transform boardChild = board.transform.GetChild(0);
             boxCollider = boardChild.GetComponent<BoxCollider>();
         }
+        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
+        vector3Filter2 = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
     }
 
     void Update()
@@ -92,7 +94,6 @@ public class VSurfacePointV2 : MonoBehaviour
         if(indexPointerPoseDetected)
         {
             // Get hand poses
-            frames = 0;
             Pose pose1, pose2;
             bool pose1Valid = hand.GetJointPose(HandJointId.HandIndexTip, out pose1);
             bool pose2Valid = hand.GetJointPose(HandJointId.HandIndex1, out pose2);
@@ -105,12 +106,12 @@ public class VSurfacePointV2 : MonoBehaviour
             }
             else
             {
-                Debug.Log("Using Previous poses");
                 pose1.position = prevPose1;
                 pose2.position = prevPose2;
             }
 
-            // Calculate capsule parameters
+            // Calculate ray parameters
+            // Uses the index finger tip and the index finger 1st joint to calculate the ray parameters.
             midPoint = (pose1.position + pose2.position) / 2;
             indexDirection = (pose1.position - pose2.position).normalized;
             
@@ -120,15 +121,20 @@ public class VSurfacePointV2 : MonoBehaviour
             length += 0.01f;
             edgePoint = midPoint - (indexDirection * length);
 
+            // Filter the data
+            edgePoint = vector3Filter.Filter(edgePoint);
+            indexDirection = vector3Filter2.Filter(indexDirection);
+
             // Set ray parameters
             Ray ray = new Ray(edgePoint, indexDirection);
             rayLength = length * 2.0f;
-            rayLengthMax = length * 2.5f;
+            rayLengthMax = length * 2.1f;
             float currentRayLength = hasHitOnce ? rayLengthMax : rayLength;
 
             // Raycast to the board
             if(boxCollider.Raycast(ray, out RaycastHit hit, currentRayLength))
             {
+                frames = 0;
                 hasHitOnce = true;
                 if(createNewTube)
                 {
@@ -137,6 +143,7 @@ public class VSurfacePointV2 : MonoBehaviour
                     GameObject tubeObject = new GameObject("Tube");
                     tubeObject.tag = "Tube";
                     vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
+                    vector3Filter2 = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
                     currentTube = tubeObject.AddComponent<ProceduralTube>();
                     currentTube.material = tubeMaterial;
                 }
@@ -158,7 +165,7 @@ public class VSurfacePointV2 : MonoBehaviour
         if (startedDrawing)
         {
             frames++;
-            if (frames > 20) { finishedDrawing = true; hasHitOnce = false; }
+            if (frames > 10) { finishedDrawing = true; hasHitOnce = false; }
         }
     }
 
@@ -166,9 +173,7 @@ public class VSurfacePointV2 : MonoBehaviour
     void UpdateLine(Vector3 point, Vector3 normal)
     {
         Vector3 offsetPoint = point + normal * 0.015f;
-        Vector3 point3D = new Vector3(offsetPoint.x, offsetPoint.y, offsetPoint.z);
-        Vector3 filterPoint = vector3Filter.Filter(point3D);
-        currentTube.AddPoint(filterPoint);
+        currentTube.AddPoint(offsetPoint);
     }
 
     // Public method to set the index finger pose detected
