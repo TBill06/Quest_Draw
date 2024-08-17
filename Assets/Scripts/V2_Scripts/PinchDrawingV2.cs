@@ -54,6 +54,7 @@ public class PinchDrawingV2 : MonoBehaviour
         // Check if the script should run and reset the variables
         if (!ScriptManager.shouldRun)
         {
+            vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
             startedDrawing = false;
             finishedDrawing = false;
             createNewTube = true;
@@ -70,7 +71,6 @@ public class PinchDrawingV2 : MonoBehaviour
                 startedDrawing = true;
                 GameObject tubeObject = new GameObject("Tube");
                 tubeObject.tag = "Tube";
-                vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
                 currentTube = tubeObject.AddComponent<ProceduralTube>();
                 currentTube.material = tubeMaterial;
             }
