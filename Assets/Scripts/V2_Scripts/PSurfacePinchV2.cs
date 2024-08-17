@@ -55,8 +55,6 @@ public class PSurfacePinchV2 : MonoBehaviour
             hand = leftHand;
         else
             hand = rightHand;
-        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
-        vector3Filter2 = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
     }
 
     void Update()

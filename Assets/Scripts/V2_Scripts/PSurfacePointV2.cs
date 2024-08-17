@@ -67,8 +67,6 @@ public class PSurfacePointV2 : MonoBehaviour
             poseDetector_L.SetActive(false);
             poseDetector_R.SetActive(true);
         }
-        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
-        vector3Filter2 = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
     }
 
     void Update()

@@ -39,7 +39,7 @@ public class Setup : MonoBehaviour
         // Set the file path
         SaveData.SetFilePath(PlayerPrefs.GetInt("pid"));
 
-        if (PlayerPrefs.GetInt("conditionState") > 8) 
+        if (PlayerPrefs.GetInt("conditionState") > 5)
         {   
             // Load the end scene
             SceneManager.LoadScene("End");

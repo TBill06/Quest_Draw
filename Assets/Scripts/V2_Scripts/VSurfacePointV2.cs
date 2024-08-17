@@ -75,8 +75,6 @@ public class VSurfacePointV2 : MonoBehaviour
             Transform boardChild = board.transform.GetChild(0);
             boxCollider = boardChild.GetComponent<BoxCollider>();
         }
-        vector3Filter = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
-        vector3Filter2 = new OneEuroFilter<Vector3>(filterFrequency, minCutoff, beta, dcutoff);
     }
 
     void Update()

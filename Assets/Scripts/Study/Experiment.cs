@@ -31,12 +31,12 @@ public class Experiment : MonoBehaviour
         int id = PlayerPrefs.GetInt("pid");
         int conditionState = PlayerPrefs.GetInt("conditionState");
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 6; i++) {
 
             GetOrdering(i);
         }
         
-        if (conditionState > 8)
+        if (conditionState > 5)
         {
             SceneManager.LoadScene("End");
         }
@@ -83,65 +83,73 @@ public class Experiment : MonoBehaviour
     // Get the ordering of conditions based on participant ID
     Condition[] GetOrdering(int pid) {
 
-        int order = pid % 9;
+        int order = pid % 6;
         
-        Condition[] conditions = new Condition[9];
+        Condition[] conditions = new Condition[6];
 
         switch (order) {
-            
-            case (0):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None)};
-
+                 
+            case 0:
+                conditions = new Condition[]{
+                    new Condition(DrawMethod.Pinch, Surface.Physical),
+                    new Condition(DrawMethod.Pinch, Surface.Virtual),
+                    new Condition(DrawMethod.Pinch, Surface.None),
+                    new Condition(DrawMethod.Index, Surface.Physical),
+                    new Condition(DrawMethod.Index, Surface.Virtual),
+                    new Condition(DrawMethod.Index, Surface.None)
+                };
+                break;
+            case 1:
+                conditions = new Condition[]{
+                    new Condition(DrawMethod.Index, Surface.Physical),
+                    new Condition(DrawMethod.Index, Surface.Virtual),
+                    new Condition(DrawMethod.Index, Surface.None),
+                    new Condition(DrawMethod.Pinch, Surface.Physical),
+                    new Condition(DrawMethod.Pinch, Surface.Virtual),
+                    new Condition(DrawMethod.Pinch, Surface.None)
+                };
+                break;
+            case 2:
+                conditions = new Condition[]{
+                    new Condition(DrawMethod.Pinch, Surface.Virtual),
+                    new Condition(DrawMethod.Pinch, Surface.None),
+                    new Condition(DrawMethod.Pinch, Surface.Physical),
+                    new Condition(DrawMethod.Index, Surface.Virtual),
+                    new Condition(DrawMethod.Index, Surface.None),
+                    new Condition(DrawMethod.Index, Surface.Physical)
+                };
+                break;
+            case 3:
+                conditions = new Condition[]{
+                    new Condition(DrawMethod.Index, Surface.Virtual),
+                    new Condition(DrawMethod.Index, Surface.None),
+                    new Condition(DrawMethod.Index, Surface.Physical),
+                    new Condition(DrawMethod.Pinch, Surface.Virtual),
+                    new Condition(DrawMethod.Pinch, Surface.None),
+                    new Condition(DrawMethod.Pinch, Surface.Physical)
+                };
+                break;
+            case 4:
+                conditions = new Condition[]{
+                    new Condition(DrawMethod.Pinch, Surface.None),
+                    new Condition(DrawMethod.Pinch, Surface.Physical),
+                    new Condition(DrawMethod.Pinch, Surface.Virtual),
+                    new Condition(DrawMethod.Index, Surface.None),
+                    new Condition(DrawMethod.Index, Surface.Physical),
+                    new Condition(DrawMethod.Index, Surface.Virtual)
+                };
+                break;
+            case 5:
+                conditions = new Condition[]{
+                    new Condition(DrawMethod.Index, Surface.None),
+                    new Condition(DrawMethod.Index, Surface.Physical),
+                    new Condition(DrawMethod.Index, Surface.Virtual),
+                    new Condition(DrawMethod.Pinch, Surface.None),
+                    new Condition(DrawMethod.Pinch, Surface.Physical),
+                    new Condition(DrawMethod.Pinch, Surface.Virtual)
+                };
                 break;
 
-            case (1):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None)};
-
-                break;
-
-            case (2):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None)};
-
-                break;
-
-            case (3):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual)};
-
-                break;
-
-            case (4):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual)};
-
-                break;
-
-            case (5):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual)};
-
-                break;
-
-            case (6):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical)};
-
-                break;
-
-            case (7):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical), new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical)};
-
-                break;
-
-            case (8):
-
-                conditions = new Condition[]{new Condition(DrawMethod.Controller, Surface.Virtual), new Condition(DrawMethod.Controller, Surface.None), new Condition(DrawMethod.Controller, Surface.Physical), new Condition(DrawMethod.Pinch, Surface.Virtual), new Condition(DrawMethod.Pinch, Surface.None), new Condition(DrawMethod.Pinch, Surface.Physical), new Condition(DrawMethod.Index, Surface.Virtual), new Condition(DrawMethod.Index, Surface.None), new Condition(DrawMethod.Index, Surface.Physical)};
-
-                break;
         }
 
         return conditions;
@@ -151,7 +159,7 @@ public class Experiment : MonoBehaviour
     void SetupInstructions(Condition condition) {
 
 
-        string textInstructions = "";
+        string textInstructions = "If this isn't your first task please take off your headset to complete the survey before moving futher. \n";
 
 
         switch (condition.DrawMethod) {
