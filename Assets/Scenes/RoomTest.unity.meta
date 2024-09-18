@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/OVRCameraRigInteractionPrefab.prefab.meta
+guid: a05848ce84caa744cbd3525cc692b211
+PrefabImporter:
+========
 guid: f37923e2ae9360244b347fe3719cdad5
 DefaultImporter:
+>>>>>>>> main:Assets/Scenes/RoomTest.unity.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

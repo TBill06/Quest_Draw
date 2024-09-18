@@ -16,7 +16,9 @@ MonoBehaviour:
     keys:
     - OVRProjectSetup.OVRProjectSetup.OVRConfigurationTask.0c9572929db2e8975ae93ec7dc3239d9.Ignored.Android
     - OVRProjectSetup.OVRProjectSetup.OVRConfigurationTask.0c9572929db2e8975ae93ec7dc3239d9.Ignored.Standalone
-    values: 0101
+    - OVRProjectSetup.OVRProjectSetup.OVRConfigurationTask.b3b8b8fa085ea8349fe599d31b529eb0.Ignored.Android
+    - OVRProjectSetup.OVRProjectSetup.OVRConfigurationTask.b3b8b8fa085ea8349fe599d31b529eb0.Ignored.Standalone
+    values: 01010101
   intProperties:
     keys: []
     values: 
