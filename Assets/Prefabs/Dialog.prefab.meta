@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/Dialog.prefab.meta
 guid: acfe9bff448d06a48b8e894446b6c55a
+========
+guid: 9bb16f0066a57b54287e71a1a6176574
+>>>>>>>> main:Assets/Prefabs/RoomModel.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
